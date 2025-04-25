@@ -18,6 +18,3 @@ def wavelet_transform(signal: NDArray, wavelet, level: int = 2) -> tuple[NDArray
         cA_n = coeffs[0]
         cDs = coeffs[1:]
         return cA_n, cDs
-
-
-    return cA, cD
