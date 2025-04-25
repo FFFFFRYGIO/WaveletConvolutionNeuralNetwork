@@ -46,10 +46,7 @@ class SignalsPlotter:
         for i, (signal, tag, qrs_peaks, freq, cA, cDs, wavelet) in enumerate(self.signals_set):
             time = np.arange(len(signal)) / freq
 
-            if signal.ndim == 1:
-                signal_display = signal
-            else:
-                signal_display = signal[:, 0]
+            signal_display = signal if signal.ndim == 1 else signal[:, 0]
 
             axs[0, i].plot(time, signal_display)
 
