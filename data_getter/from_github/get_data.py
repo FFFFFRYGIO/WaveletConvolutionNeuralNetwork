@@ -15,7 +15,7 @@ DATA_FREQUENCY = 128  # From documentation
 
 def get_from_github(
         amount: str | int, signal_tag: str, seconds: int
-) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray]], dict[str, int]]:
+) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]:
     """Main ECGData function to get expected signals amount and types with the proper time."""
 
     if (isinstance(amount, str) and amount != 'all') or (isinstance(amount, int) and amount <= 0):
@@ -27,7 +27,7 @@ def get_from_github(
 
     fields = {'fs': DATA_FREQUENCY}
 
-    signals_list: list[tuple[NDArray, str, NDArray]] = []
+    signals_list: list[tuple[NDArray, str, NDArray, dict[str, int]]] = []
 
     match amount:
 
@@ -42,7 +42,7 @@ def get_from_github(
                 if signal_tag == 'all' or label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
                     signals_list.append(
-                        (signal_subset, label, get_qrs_peaks(signal_subset))
+                        (signal_subset, signal_tag, get_qrs_peaks(signal_subset), fields)
                     )
 
         case _:
@@ -50,11 +50,11 @@ def get_from_github(
                 if signal_tag == 'all' or label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
                     signals_list.append(
-                        (signal_subset, label, get_qrs_peaks(signal_subset))
+                        (signal_subset, signal_tag, get_qrs_peaks(signal_subset), fields)
                     )
                     amount -= 1
 
                 if not amount:
                     break
 
-    return signals_list, fields
+    return signals_list
