@@ -1,2 +1,5 @@
 # PyCharm IDE folder
 .idea/
+
+# Ignore ECGData downloaded from https://github.com/mathworks/physionet_ECG_data/blob/main/ECGData.zip
+data_getter/from_github/ECGData
