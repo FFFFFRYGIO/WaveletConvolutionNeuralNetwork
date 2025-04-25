@@ -76,5 +76,13 @@ class SignalsPlotter:
             ax_wave.set_ylabel("ψ(t)")
             ax_wave.grid(True)
 
+        for row_idx in range(1, num_levels + 2):
+            y_lims = [axs[row_idx, col].get_ylim() for col in range(len(self.signals_set))]
+            common_min = min(lim[0] for lim in y_lims)
+            common_max = max(lim[1] for lim in y_lims)
+
+            for col in range(len(self.signals_set)):
+                axs[row_idx, col].set_ylim(common_min, common_max)
+
         plt.tight_layout()
         plt.show()
