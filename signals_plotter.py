@@ -63,19 +63,21 @@ class SignalsPlotter:
 
             for coef_number, coef in enumerate([cA] + cDs):
                 level_name = "A" if coef_number == 0 else f"D{num_levels - coef_number}"
-                axs[coef_number + 1, i].plot(np.arange(len(coef)) / freq, coef)
-                axs[coef_number + 1, i].set_title(f"Level {level_name} ({wavelet})")
-                axs[coef_number + 1, i].set_xlabel("Time [s]")
-                axs[coef_number + 1, i].grid(True)
+                ax = axs[coef_number + 1, i]
+                ax.plot(np.arange(len(coef)) / freq, coef)
+                ax.set_title(f"Level {level_name} ({wavelet})")
+                ax.set_xlabel("Time [s]")
+                ax.grid(True)
 
             wavelet_function = pywt.Wavelet(wavelet)
             phi, psi, x = wavelet_function.wavefun()
 
-            axs[-1, i].plot(x, psi)
-            axs[-1, i].set_title(f"Wavelet ψ(t) – {wavelet}")
-            axs[-1, i].grid(True)
-            axs[-1, i].set_xlabel("t")
-            axs[-1, i].set_ylabel("ψ(t)")
+            ax_wave = axs[-1, i]
+            ax_wave.plot(x, psi)
+            ax_wave.set_title(f"Wavelet ψ(t) – {wavelet}")
+            ax_wave.set_xlabel("t")
+            ax_wave.set_ylabel("ψ(t)")
+            ax_wave.grid(True)
 
         plt.tight_layout()
         plt.show()
