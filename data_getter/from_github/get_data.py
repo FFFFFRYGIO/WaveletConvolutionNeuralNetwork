@@ -46,13 +46,15 @@ def get_from_github(
                     )
 
         case _:
-            for i, source_signal, label in enumerate(zip(source_signals, labels)):
+            for source_signal, label in zip(source_signals, labels):
                 if signal_tag == 'all' or label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
                     signals_list.append(
                         (signal_subset, label, get_qrs_peaks(signal_subset))
                     )
-                    if i + 1 == amount:
-                        break
+                    amount -= 1
+
+                if not amount:
+                    break
 
     return signals_list, fields
