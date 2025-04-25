@@ -1,0 +1,42 @@
+"""
+Get ECG data from physionet called "AF Termination Challenge Database".
+Source: https://physionet.org/content/aftdb/1.0.0/
+"""
+import os
+
+import wfdb
+from numpy.typing import NDArray
+
+from data_getter.utils import get_signal_subset, get_qrs_peaks
+
+DATA_SOURCE = os.path.join(
+    'data_getter', 'from_af_termination_challenge', 'af-termination-challenge-database-1.0.0', 'learning-set')
+DATA_FREQUENCY = 128  # From documentation
+
+
+def get_from_af_termination_challenge(
+        signal_tags: list[str], seconds: int
+) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]:
+    """Main function to get expected signals amount and types with the proper time."""
+
+    signals_list: list[tuple[NDArray, str, NDArray, dict[str, int]]] = []
+
+    for tag in signal_tags:
+        record_path = os.path.join(DATA_SOURCE, tag)
+
+        signal, fields = wfdb.rdsamp(record_path)
+
+        try:
+            annotation = wfdb.rdann(record_path, 'qrs')
+            qrs_locs = annotation.sample
+        except FileNotFoundError:
+            print("⚠️Could not find qrs file.")
+            qrs_locs = []
+
+        signal_subset = get_signal_subset(signal, fields['fs'], seconds)
+
+        qrs_peaks = get_qrs_peaks(signal, qrs_locs, seconds, fields['fs'])
+
+        signals_list.append((signal_subset, tag, qrs_peaks, fields))
+
+    return signals_list

@@ -1,5 +1,11 @@
 # PyCharm IDE folder
 .idea/
 
+
+# IGNORE DOWNLOADED ECG DATA
+
 # Ignore ECGData downloaded from https://github.com/mathworks/physionet_ECG_data/blob/main/ECGData.zip
 data_getter/from_github/ECGData
+
+# Ignore ECGData downloaded from https://github.com/mathworks/physionet_ECG_data/blob/main/ECGData.zip
+data_getter/from_af_termination_challenge/af-termination-challenge-database-1.0.0
