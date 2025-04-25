@@ -19,7 +19,7 @@ def get_qrs_peaks(signal: NDArray) -> NDArray:
 
     # Main setup
     qrs_height_factor = 1.0
-    qrs_min_distance = 0.2
+    qrs_min_distance = 0.1
 
     height_thresh = signal.mean() + qrs_height_factor * signal.std()
     min_dist_samples = int(qrs_min_distance * signal.shape[0])
