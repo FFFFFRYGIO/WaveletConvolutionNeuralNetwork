@@ -5,13 +5,12 @@ import numpy as np
 import pywt
 from numpy.typing import NDArray
 
-matplotlib.use('TkAgg')
-
 
 class SignalsPlotter:
     """SignalsPlotter class to gather and display signal analysis with wavelets and wavelet transform"""
 
     def __init__(self) -> None:
+        matplotlib.use("TkAgg")
         self.signals_set: list[tuple[NDArray, str, NDArray, int, NDArray, NDArray, str]] = []
 
     def add_signal_with_analysis(
@@ -30,7 +29,7 @@ class SignalsPlotter:
 
         return max_num_levels
 
-    def plot_signals(self) -> None:
+    def compute_plotting_signals(self) -> None:
         """Plot all signals added to signals plotter"""
 
         squeeze_when_one_signal = False
@@ -87,5 +86,8 @@ class SignalsPlotter:
             for col in range(num_signals):
                 axs[row_idx, col].set_ylim(common_min, common_max)
 
+    @staticmethod
+    def display_plots():
+        """Display all signals computed signals"""
         plt.tight_layout()
         plt.show()

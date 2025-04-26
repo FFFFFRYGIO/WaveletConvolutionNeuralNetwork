@@ -10,8 +10,6 @@ def dwt_plotting(wavelet: str, signal_time: int):
 
     decomposition_levels = 4
 
-    signals_plotter = SignalsPlotter()
-
     h_signals_data = get_from_github(2, 'NSR', signal_time)
 
     for signal, tag, qrs_peaks, fields in h_signals_data:
@@ -30,7 +28,8 @@ def dwt_plotting(wavelet: str, signal_time: int):
 
         signals_plotter.add_signal_with_analysis((signal, tag, qrs_peaks, fields['fs'], cA, cDs, wavelet))
 
-    signals_plotter.plot_signals()
+    signals_plotter.compute_plotting_signals()
+
 
 
 def main():
@@ -38,6 +37,9 @@ def main():
 
     dwt_plotting('db12', 10)
 
+    signals_plotter.display_plots()
+
 
 if __name__ == '__main__':
+    signals_plotter = SignalsPlotter()
     main()
