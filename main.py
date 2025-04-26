@@ -8,7 +8,7 @@ from wavelet_transform import wavelet_transform
 def dwt_plotting(wavelet: str, signal_time: int):
     """Get signal, get wavelet transforms, finally plot them."""
 
-    decomposition_levels = 4
+    decomposition_levels = 3
 
     h_signals_data = get_from_github(2, 'NSR', signal_time)
 
