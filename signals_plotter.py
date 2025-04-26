@@ -36,34 +36,38 @@ class SignalsPlotter:
         squeeze_when_one_signal = False
 
         num_levels = self.get_max_num_levels()
+        num_signals = len(self.signals_set)
 
         fig, axs = plt.subplots(
-            num_levels + 3, len(self.signals_set),
-            figsize=(6 * len(self.signals_set), 2 * (num_levels + 3)),
+            num_levels + 3, num_signals,
+            figsize=(6 * num_signals, 2 * (num_levels + 3)),
             squeeze=squeeze_when_one_signal
         )
 
         for i, (signal, tag, qrs_peaks, freq, cA, cDs, wavelet) in enumerate(self.signals_set):
-            time = np.arange(len(signal)) / freq
+            duration = len(signal) / freq
+            time_signal = np.linspace(0, duration, num=len(signal))
 
             signal_display = signal if signal.ndim == 1 else signal[:, 0]
 
-            axs[0, i].plot(time, signal_display)
-
+            signal_ax = axs[0, i]
+            signal_ax.plot(time_signal, signal_display)
+            signal_ax.set_title(f"ECG: {tag} with QRS (len={len(signal)})")
+            signal_ax.set_xlabel("Time [s]")
+            signal_ax.set_ylabel("Amplitude [mV]")
+            signal_ax.set_xlim(0, duration)
+            signal_ax.grid(True)
             for qrs in qrs_peaks:
-                axs[0, i].axvline(x=qrs / freq, color='r', linestyle='--', alpha=0.6)
-
-            axs[0, i].set_title(f"ECG: {tag} with QRS")
-            axs[0, i].set_xlabel("Time [s]")
-            axs[0, i].set_ylabel("Amplitude [mV]")
-            axs[0, i].grid(True)
+                signal_ax.axvline(x=qrs / freq, color='r', linestyle='--', alpha=0.6)
 
             for coef_number, coef in enumerate([cA] + cDs):
-                level_name = "A" if coef_number == 0 else f"D{num_levels - coef_number}"
+                level_name = "A" if coef_number == 0 else f"D{len(cDs) - coef_number + 1}"
                 ax = axs[coef_number + 1, i]
-                ax.plot(np.arange(len(coef)) / freq, coef)
+                time_coef = np.linspace(0, duration, num=len(coef))
+                ax.plot(time_coef, coef)
                 ax.set_title(f"Level {level_name} ({wavelet})")
                 ax.set_xlabel("Time [s]")
+                ax.set_xlim(0, duration)
                 ax.grid(True)
 
             wavelet_function = pywt.Wavelet(wavelet)
@@ -77,11 +81,10 @@ class SignalsPlotter:
             ax_wave.grid(True)
 
         for row_idx in range(1, num_levels + 2):
-            y_lims = [axs[row_idx, col].get_ylim() for col in range(len(self.signals_set))]
+            y_lims = [axs[row_idx, col].get_ylim() for col in range(num_signals)]
             common_min = min(lim[0] for lim in y_lims)
             common_max = max(lim[1] for lim in y_lims)
-
-            for col in range(len(self.signals_set)):
+            for col in range(num_signals):
                 axs[row_idx, col].set_ylim(common_min, common_max)
 
         plt.tight_layout()
