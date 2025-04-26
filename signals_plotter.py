@@ -38,9 +38,12 @@ class SignalsPlotter:
         num_signals = len(self.signals_set)
 
         fig, axs = plt.subplots(
-            num_levels + 3, num_signals,
+            nrows=num_levels + 2,
+            ncols=num_signals + 1,
             figsize=(6 * num_signals, 2 * (num_levels + 3)),
-            squeeze=squeeze_when_one_signal
+            squeeze=squeeze_when_one_signal,
+            sharex='col',
+            sharey='row',
         )
 
         for i, (signal, tag, qrs_peaks, freq, cA, cDs, wavelet) in enumerate(self.signals_set):
@@ -57,7 +60,7 @@ class SignalsPlotter:
             signal_ax.set_xlim(0, duration)
             signal_ax.grid(True)
             for qrs in qrs_peaks:
-                signal_ax.axvline(x=qrs / freq, color='r', linestyle='--', alpha=0.6)
+                signal_ax.axvline(x=qrs / freq, color='r', linestyle='--', alpha=0.1)
 
             for coef_number, coef in enumerate([cA] + cDs):
                 level_name = "A" if coef_number == 0 else f"D{len(cDs) - coef_number + 1}"
@@ -72,19 +75,15 @@ class SignalsPlotter:
             wavelet_function = pywt.Wavelet(wavelet)
             phi, psi, x = wavelet_function.wavefun()
 
-            ax_wave = axs[-1, i]
+            ax_wave = axs[i, -1]
             ax_wave.plot(x, psi)
-            ax_wave.set_title(f"Wavelet ψ(t) – {wavelet}")
+            ax_wave.set_title(f"Wavelet for {tag} ψ(t) – {wavelet}")
             ax_wave.set_xlabel("t")
             ax_wave.set_ylabel("ψ(t)")
             ax_wave.grid(True)
 
-        for row_idx in range(1, num_levels + 2):
-            y_lims = [axs[row_idx, col].get_ylim() for col in range(num_signals)]
-            common_min = min(lim[0] for lim in y_lims)
-            common_max = max(lim[1] for lim in y_lims)
-            for col in range(num_signals):
-                axs[row_idx, col].set_ylim(common_min, common_max)
+        for i in range(num_levels + 1, num_signals - 1, -1):
+            axs[i, -1].axis('off')
 
     @staticmethod
     def display_plots():
