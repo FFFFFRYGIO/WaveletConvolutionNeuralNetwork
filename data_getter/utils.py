@@ -50,3 +50,13 @@ def get_qrs_peaks(
     )
 
     return peaks
+
+
+def normalize_signal(signal: NDArray) -> NDArray:
+    """Normalize ECG signal from -1 to 1"""
+    signal_max = max(signal)
+    signal_min = min(signal)
+
+    normalized_signal = (signal - signal_min) / (signal_max - signal_min)
+
+    return normalized_signal

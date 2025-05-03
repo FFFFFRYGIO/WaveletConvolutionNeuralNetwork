@@ -7,7 +7,7 @@ import os
 import wfdb
 from numpy.typing import NDArray
 
-from data_getter.utils import get_signal_subset, get_qrs_peaks
+from data_getter.utils import get_signal_subset, get_qrs_peaks, normalize_signal
 
 DATA_SOURCE = os.path.join(
     'data_getter', 'from_af_termination_challenge', 'af-termination-challenge-database-1.0.0', 'learning-set')
@@ -38,8 +38,10 @@ def get_from_af_termination_challenge(
 
         signal_subset = get_signal_subset(signal, fields['fs'], seconds)
 
-        qrs_peaks = get_qrs_peaks(signal, qrs_locs, seconds, fields['fs'])
+        signal_subset_normalized = normalize_signal(signal_subset)
 
-        signals_list.append((signal_subset, tag, qrs_peaks, fields))
+        qrs_peaks = get_qrs_peaks(signal_subset_normalized, qrs_locs, seconds, fields['fs'])
+
+        signals_list.append((signal_subset_normalized, tag, qrs_peaks, fields))
 
     return signals_list
