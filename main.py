@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 
 from data_getter.from_github.get_data import get_from_github
 from data_getter.from_af_termination_challenge.get_data import get_from_af_termination_challenge
+from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
 from signals_plotter import SignalsPlotter
 from wavelet_transform import wavelet_transform
 
@@ -14,7 +15,6 @@ def dwt_plotting(wavelet: str, signal_time: int):
 
     decomposition_levels = 3
 
-    h_signals_data = get_from_github(2, 'NSR', signal_time)
 
     for signal, tag, qrs_peaks, fields in h_signals_data:
         print(signal.shape, tag, qrs_peaks.shape, fields)
@@ -23,7 +23,7 @@ def dwt_plotting(wavelet: str, signal_time: int):
 
         signals_plotter.add_signal_with_analysis((signal, tag, qrs_peaks, fields['fs'], cA, cDs, wavelet))
 
-    af_signals_data = get_from_af_termination_challenge(['n01'], signal_time)
+    af_signals_data = get_from_af_termination_challenge(['n01', 'n02'], signal_time)
 
     for signal, tag, qrs_peaks, fields in af_signals_data:
         print(signal.shape, tag, qrs_peaks.shape, fields)
