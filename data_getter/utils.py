@@ -4,12 +4,18 @@ from numpy.typing import NDArray
 from scipy.signal import find_peaks
 
 
-def get_signal_subset(signal: NDArray, signal_frequency: int, seconds: int | None = None) -> NDArray:
+def get_signal_subset(
+        signal: NDArray, signal_frequency: int, seconds: int | None = None, sample_shift_seconds: int | None = None
+) -> NDArray:
     """Get specified time for signal."""
+
+    sample_shifting = 0
+    if sample_shift_seconds:
+        sample_shifting = sample_shift_seconds * signal_frequency
 
     if seconds:
         duration_samples = int(seconds * signal_frequency)
-        signal = signal[:duration_samples]
+        signal = signal[sample_shifting: duration_samples + sample_shifting]
 
     return signal
 
