@@ -1,6 +1,9 @@
 # PyCharm IDE folder
 .idea/
 
+# Unused old analysis that might be useful later
+old_temporal_analysis/
+
 
 # IGNORE DOWNLOADED ECG DATA
 
