@@ -73,12 +73,15 @@ class SignalsPlotter:
             wavelet_function = pywt.Wavelet(wavelet)
             phi, psi, x = wavelet_function.wavefun()
 
-            ax_wave = axs[i, -1]
-            ax_wave.plot(x, psi)
-            ax_wave.set_title(f"Wavelet for {tag} ψ(t) – {wavelet}")
-            ax_wave.set_xlabel("t")
-            ax_wave.set_ylabel("ψ(t)")
-            ax_wave.grid(True)
+            if i + 1 < num_levels + 2:
+                ax_wave = axs[i, -1]
+                ax_wave.plot(x, psi)
+                ax_wave.set_title(f"Wavelet for {tag} ψ(t) – {wavelet}")
+                ax_wave.set_xlabel("t")
+                ax_wave.set_ylabel("ψ(t)")
+                ax_wave.grid(True)
+            else:
+                print(f'Skipped plotting wavelet {wavelet} for {tag}, no space for it')
 
         for i in range(num_levels + 1, num_signals - 1, -1):
             axs[i, -1].axis('off')
