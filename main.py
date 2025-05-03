@@ -56,8 +56,6 @@ def cwt_plotting(wavelet_name: str, signal_time: int):
 
     for idx, (signal, tag, qrs_peaks, fields) in enumerate(all_signals):
 
-        signal = signal if signal.ndim == 1 else signal[:, 0]
-
         sig_ax = axs[0, idx]
         sig_ax.plot(signal)
         sig_ax.set_title(f"ECG: {tag} with QRS (len={len(signal)})")

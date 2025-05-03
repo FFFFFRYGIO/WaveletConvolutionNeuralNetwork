@@ -7,9 +7,6 @@ from numpy.typing import NDArray
 def wavelet_transform(signal: NDArray, wavelet, level: int = 2) -> tuple[NDArray, list[NDArray]]:
     """Run wavelet transform"""
 
-    if signal.ndim == 2:
-        signal = signal[:, 0]
-
     if level == 2:
         cA, cD = pywt.dwt(signal, wavelet, level)
         return cA, [cD]

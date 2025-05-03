@@ -26,6 +26,9 @@ def get_from_af_termination_challenge(
 
         signal, fields = wfdb.rdsamp(record_path)
 
+        if signal.ndim == 2:
+            signal = signal[:, 0]
+
         try:
             annotation = wfdb.rdann(record_path, 'qrs')
             qrs_locs = annotation.sample
