@@ -10,11 +10,10 @@ from signals_plotter import SignalsPlotter
 from wavelet_transform import wavelet_transform
 
 
-def dwt_plotting(wavelet: str, signal_time: int):
+def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
     """Get signal, get wavelet transforms, finally plot them."""
 
-    decomposition_levels = 3
-
+    h_signals_data = get_from_mit_bih_arrhythmia_database(['100', '103', '108', '113'], signal_time)
 
     for signal, tag, qrs_peaks, fields in h_signals_data:
         print(signal.shape, tag, qrs_peaks.shape, fields)
@@ -31,8 +30,6 @@ def dwt_plotting(wavelet: str, signal_time: int):
         cA, cDs = wavelet_transform(signal, wavelet, level=decomposition_levels)
 
         signals_plotter.add_signal_with_analysis((signal, tag, qrs_peaks, fields['fs'], cA, cDs, wavelet))
-
-    signals_plotter.compute_plotting_signals()
 
 
 def cwt_plotting(wavelet_name: str, signal_time: int):
@@ -78,8 +75,16 @@ def cwt_plotting(wavelet_name: str, signal_time: int):
 def main():
     """Get signals, create wavelet transforms, plot results"""
 
-    dwt_plotting('db12', 10)
-    cwt_plotting('morl', 5)
+    dwt_plotting('db4', 20, decomposition_levels=2)
+    signals_plotter.compute_plotting_signals()
+    signals_plotter.signals_set = []
+
+    dwt_plotting('db4', 20, decomposition_levels=4)
+    signals_plotter.compute_plotting_signals()
+    signals_plotter.signals_set = []
+
+    dwt_plotting('db4', 20, decomposition_levels=6)
+    signals_plotter.compute_plotting_signals()
 
     signals_plotter.display_plots()
 
