@@ -7,7 +7,7 @@ import os
 from numpy.typing import NDArray
 from scipy.io import loadmat
 
-from data_getter.utils import get_signal_subset, get_qrs_peaks
+from data_getter.utils import get_signal_subset, get_qrs_peaks, normalize_signal
 
 DATA_SOURCE = os.path.join('data_getter', 'from_github', 'ECGData', 'ECGData.mat')
 DATA_FREQUENCY = 128  # From documentation
