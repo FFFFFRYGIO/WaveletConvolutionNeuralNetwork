@@ -51,7 +51,7 @@ class SignalsPlotter:
             time_signal = np.linspace(0, duration, num=len(signal))
 
             signal_ax = axs[0, i]
-            signal_ax.plot(time_signal, signal_display)
+            signal_ax.plot(time_signal, signal)
             signal_ax.set_title(f"ECG: {tag} with QRS (len={len(signal)})")
             signal_ax.set_xlabel("Time [s]")
             signal_ax.set_ylabel("Amplitude [mV]")
