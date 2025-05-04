@@ -44,8 +44,6 @@ def get_from_mit_bih_arrhythmia_database(
 
         signal_subset_normalized = normalize_signal(signal_subset)
 
-        qrs_peaks = get_qrs_peaks(signal_subset_normalized, qrs_locs, seconds, fields['fs'])
-
-        signals_list.append((signal_subset_normalized, tag, qrs_peaks, fields))
+        signals_list.append((signal_subset_normalized, tag, get_qrs_peaks(signal_subset_normalized), fields))
 
     return signals_list
