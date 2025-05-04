@@ -1,9 +1,5 @@
 """Main script to run expected analysis"""
-import numpy as np
-import pywt
-from matplotlib import pyplot as plt
 
-from data_getter.from_github.get_data import get_from_github
 from data_getter.from_af_termination_challenge.get_data import get_from_af_termination_challenge
 from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
 from signals_plotter import SignalsPlotter
