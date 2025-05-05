@@ -35,6 +35,33 @@ def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
     signals_plotter.compute_plotting()
 
 
+def inverse_dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
+    """Get signals, get wavelet transforms, finally plot different inverse dwt for them."""
+
+    signals_plotter = InverseDWTPlotter()
+
+    signals_data = get_signals_data(signal_time)
+
+    inverse_dwt_levels_operations = [['A'], ['D1'], ['A', 'D1']]
+
+    for signal, tag, qrs_peaks, fields in signals_data:
+        print(signal.shape, tag, qrs_peaks.shape, fields)
+
+        cA, cDs = discrete_wavelet_transform(signal, wavelet, level=decomposition_levels)
+
+        inverse_dwt_list = []
+
+        for levels_for_inversion in inverse_dwt_levels_operations:
+            inverse_dwt = inverse_discrete_wavelet_transform(cA, cDs, wavelet, levels_for_inversion)
+            inverse_dwt_list.append((levels_for_inversion, inverse_dwt))
+
+        signals_plotter.add_signal_with_analysis(
+            (signal, tag, qrs_peaks, fields['fs'], cA, cDs, wavelet, inverse_dwt_list)
+        )
+
+    signals_plotter.compute_plotting(add_decompositions=True)
+
+
 def main():
     """Get signals, create wavelet transforms, plot results."""
 
