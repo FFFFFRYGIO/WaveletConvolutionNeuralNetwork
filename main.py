@@ -2,7 +2,7 @@
 
 from data_getter.from_af_termination_challenge.get_data import get_from_af_termination_challenge
 from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
-from signals_plotter import SignalsPlotter
+from plotters.dwt_decomposition_plotter import DWTDecompositionPlotter
 from wavelet_transform import wavelet_transform
 
 
@@ -46,5 +46,5 @@ def main():
 
 
 if __name__ == '__main__':
-    signals_plotter = SignalsPlotter()
+    signals_plotter = DWTDecompositionPlotter()
     main()

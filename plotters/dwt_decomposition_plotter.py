@@ -6,7 +6,7 @@ import pywt
 from numpy.typing import NDArray
 
 
-class SignalsPlotter:
+class DWTDecompositionPlotter:
     """SignalsPlotter class to gather and display signal analysis with wavelets and wavelet transform"""
 
     def __init__(self) -> None:
