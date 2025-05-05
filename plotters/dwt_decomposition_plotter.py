@@ -1,4 +1,3 @@
-"""SignalsPlotter class to gather and display signal analysis with wavelets and wavelet transform"""
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,7 +8,7 @@ from plotters.signals_plotter import SignalsPlotter
 
 
 class DWTDecompositionPlotter(SignalsPlotter):
-    """DWTDecompositionPlotter class to gather and display signal analysis with wavelets and wavelet transform"""
+    """DWTDecompositionPlotter class to gather and display signal analysis with wavelets and wavelet transform."""
 
     def __init__(self) -> None:
         self.signals_set: list[tuple[NDArray, str, NDArray, int, NDArray, NDArray, str]] = []
@@ -17,11 +16,11 @@ class DWTDecompositionPlotter(SignalsPlotter):
     def add_signal_with_analysis(
             self, signal_content: tuple[NDArray, str, NDArray, int, NDArray, NDArray, str]
     ) -> None:
-        """Add signal to signals_set with its tas, qrs_peaks and frequency and wavelet transform"""
+        """Add signal to signals_set with its tas, qrs_peaks and frequency and wavelet transform."""
         self.signals_set.append(signal_content)
 
     def get_max_num_levels(self) -> int:
-        """Get maximum number of levels for wavelets decomposition"""
+        """Get maximum number of levels for wavelets decomposition."""
         max_num_levels = 0
         for signal, tag, qrs_peaks, freq, cA, cDs, wavelet in self.signals_set:
             cDs_number = len(cDs)
@@ -31,7 +30,7 @@ class DWTDecompositionPlotter(SignalsPlotter):
         return max_num_levels
 
     def compute_plotting(self) -> None:
-        """Plot all signals added to signals plotter"""
+        """Plot all signals added to signals plotter."""
 
         squeeze_when_one_signal = False
 

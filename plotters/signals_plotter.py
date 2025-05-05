@@ -1,4 +1,4 @@
-"""SignalsPlotter abstract class for specific signals plotters"""
+"""SignalsPlotter abstract class for specific signals plotters."""
 
 from abc import ABC, abstractmethod
 
@@ -9,14 +9,14 @@ matplotlib.use("TkAgg")
 
 
 class SignalsPlotter(ABC):
-    """SignalsPlotter class for specific signals plotters that contains main implementations"""
+    """SignalsPlotter class for specific signals plotters that contains main implementations."""
 
     @abstractmethod
     def compute_plotting(self):
-        """Plot all needed elements"""
+        """Plot all needed elements."""
 
     @staticmethod
     def display_plots():
-        """Display all signals computed signals"""
+        """Display all signals computed signals."""
         plt.tight_layout()
         plt.show()

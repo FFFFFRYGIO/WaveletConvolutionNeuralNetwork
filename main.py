@@ -1,4 +1,4 @@
-"""Main script to run expected analysis"""
+"""Main script to run expected analysis."""
 
 from data_getter.from_af_termination_challenge.get_data import get_from_af_termination_challenge
 from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
@@ -34,7 +34,7 @@ def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
 
 
 def main():
-    """Get signals, create wavelet transforms, plot results"""
+    """Get signals, create wavelet transforms, plot results."""
 
     dwt_plotting('sym4', 20, decomposition_levels=6)
 

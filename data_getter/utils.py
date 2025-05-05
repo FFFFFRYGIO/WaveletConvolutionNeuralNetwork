@@ -26,7 +26,7 @@ def get_qrs_peaks(
         seconds: int | None = None,
         signal_frequency: int | None = None
 ) -> NDArray:
-    """Get qrs peaks times"""
+    """Get qrs peaks times."""
 
     if qrs_locs is not None and len(qrs_locs) > 0:
         if seconds is None or signal_frequency is None:
@@ -53,7 +53,7 @@ def get_qrs_peaks(
 
 
 def normalize_signal(signal: NDArray) -> NDArray:
-    """Normalize ECG signal from -1 to 1"""
+    """Normalize ECG signal from -1 to 1."""
     signal_max = max(signal)
     signal_min = min(signal)
 
