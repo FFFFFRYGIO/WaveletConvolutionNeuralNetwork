@@ -27,7 +27,7 @@ def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
     signals_data = get_signals_data(signal_time)
 
     for signal, tag, qrs_peaks, fields in signals_data:
-        print(signal.shape, tag, qrs_peaks.shape, fields)
+        print(signal.shape, tag, qrs_peaks.shape, fields['fs'])
 
         cA, cDs = discrete_wavelet_transform(signal, wavelet, level=decomposition_levels)
 
