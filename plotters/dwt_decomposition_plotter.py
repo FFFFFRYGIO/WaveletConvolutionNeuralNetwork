@@ -56,5 +56,5 @@ class DWTDecompositionPlotter(SignalsPlotter):
                 else:
                     print(f'Skipped plotting wavelet {wavelet} for {tag}, no space for it')
 
-        for i in range(num_levels + 1, num_signals - 1, -1):
+        for i in range(axs.shape[0] - 1, num_signals - 1, -1):
             axs[i, -1].axis('off')
