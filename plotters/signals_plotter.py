@@ -62,7 +62,21 @@ class SignalsPlotter(ABC):
         plot_ax.grid(True)
 
     @staticmethod
-    def display_plots():
+    def display_plots(maximized: bool = True):
         """Display all signals computed signals."""
         plt.tight_layout()
+
+        if maximized:
+            mgr = plt.get_current_fig_manager()
+            win = getattr(mgr, "window", None)
+
+            if win is not None and hasattr(win, "showMaximized"):
+                win.showMaximized()
+            elif hasattr(mgr, "full_screen_toggle"):  # Fallback for Qt’s new API
+                mgr.full_screen_toggle()
+            elif win is not None and hasattr(win, "state"):  # TkAgg
+                win.state("zoomed")
+            elif win is not None and hasattr(win, "maximize"):  # GTK, WX, etc.
+                win.maximize()
+
         plt.show()
