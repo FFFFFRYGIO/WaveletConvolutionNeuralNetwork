@@ -46,7 +46,7 @@ class InverseDWTPlotter(SignalsPlotter):
         fig, axs = plt.subplots(
             nrows=1 + rows_for_decomposition + num_inverse_dwt,
             ncols=num_signals + 1,
-            figsize=(6 * num_signals, 2 * (num_inverse_dwt + 3)),
+            figsize=(6 * (num_signals + 1), 2 * (1 + rows_for_decomposition + num_inverse_dwt)),
             squeeze=squeeze_when_one_signal,
             sharex='col',
             sharey='row',
