@@ -4,7 +4,7 @@ from data_getter.from_af_termination_challenge.get_data import get_from_af_termi
 from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
 from plotters.dwt_decomposition_plotter import DWTDecompositionPlotter
 from plotters.signals_plotter import SignalsPlotter
-from wavelet_transform import wavelet_transform
+from wavelet_transform import discrete_wavelet_transform
 
 
 def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
@@ -17,7 +17,7 @@ def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
     for signal, tag, qrs_peaks, fields in h_signals_data:
         print(signal.shape, tag, qrs_peaks.shape, fields)
 
-        cA, cDs = wavelet_transform(signal, wavelet, level=decomposition_levels)
+        cA, cDs = discrete_wavelet_transform(signal, wavelet, level=decomposition_levels)
 
         signals_plotter.add_signal_with_analysis((signal, tag, qrs_peaks, fields['fs'], cA, cDs, wavelet))
 
@@ -26,7 +26,7 @@ def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
     for signal, tag, qrs_peaks, fields in af_signals_data:
         print(signal.shape, tag, qrs_peaks.shape, fields)
 
-        cA, cDs = wavelet_transform(signal, wavelet, level=decomposition_levels)
+        cA, cDs = discrete_wavelet_transform(signal, wavelet, level=decomposition_levels)
 
         signals_plotter.add_signal_with_analysis((signal, tag, qrs_peaks, fields['fs'], cA, cDs, wavelet))
 
