@@ -5,12 +5,13 @@ import numpy as np
 import pywt
 from numpy.typing import NDArray
 
+from plotters.signals_plotter import SignalsPlotter
 
-class DWTDecompositionPlotter:
-    """SignalsPlotter class to gather and display signal analysis with wavelets and wavelet transform"""
+
+class DWTDecompositionPlotter(SignalsPlotter):
+    """DWTDecompositionPlotter class to gather and display signal analysis with wavelets and wavelet transform"""
 
     def __init__(self) -> None:
-        matplotlib.use("TkAgg")
         self.signals_set: list[tuple[NDArray, str, NDArray, int, NDArray, NDArray, str]] = []
 
     def add_signal_with_analysis(
@@ -29,7 +30,7 @@ class DWTDecompositionPlotter:
 
         return max_num_levels
 
-    def compute_plotting_signals(self) -> None:
+    def compute_plotting(self) -> None:
         """Plot all signals added to signals plotter"""
 
         squeeze_when_one_signal = False
@@ -85,9 +86,3 @@ class DWTDecompositionPlotter:
 
         for i in range(num_levels + 1, num_signals - 1, -1):
             axs[i, -1].axis('off')
-
-    @staticmethod
-    def display_plots():
-        """Display all signals computed signals"""
-        plt.tight_layout()
-        plt.show()
