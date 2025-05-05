@@ -15,6 +15,9 @@ class SignalsPlotter(ABC):
     def compute_plotting(self):
         """Plot all needed elements."""
 
+    def plot_ecg_signal(self):
+        """Plot ecg signal."""
+
     @staticmethod
     def display_plots():
         """Display all signals computed signals."""
