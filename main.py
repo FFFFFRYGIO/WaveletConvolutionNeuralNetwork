@@ -1,10 +1,11 @@
 """Main script to run expected analysis."""
+from numpy._typing import NDArray
 
 from data_getter.from_af_termination_challenge.get_data import get_from_af_termination_challenge
 from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
 from plotters.dwt_decomposition_plotter import DWTDecompositionPlotter
 from plotters.signals_plotter import SignalsPlotter
-from wavelet_transform import discrete_wavelet_transform
+from wavelet_transform import discrete_wavelet_transform, inverse_discrete_wavelet_transform
 
 
 def get_signals_data(
