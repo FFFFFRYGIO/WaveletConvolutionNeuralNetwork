@@ -20,7 +20,7 @@ class DWTDecompositionPlotter(SignalsPlotter):
         """Add signal to signals_set with its tas, qrs_peaks, frequency and wavelet transform."""
         self.signals_set.append(signal_content)
 
-    def compute_plotting(self) -> None:
+    def compute_plotting(self, plot_wavelets: bool = True) -> None:
         """Plot all signals added to signals plotter."""
 
         squeeze_when_one_signal = False
@@ -30,7 +30,7 @@ class DWTDecompositionPlotter(SignalsPlotter):
 
         fig, axs = plt.subplots(
             nrows=1 + num_levels,
-            ncols=num_signals + 1,
+            ncols=num_signals + 1 * plot_wavelets,
             figsize=(6 * (num_signals + 1), 2 * (1 + num_levels)),
             squeeze=squeeze_when_one_signal,
             sharex='col',
@@ -52,10 +52,12 @@ class DWTDecompositionPlotter(SignalsPlotter):
                 ax.set_xlim(0, duration)
                 ax.grid(True)
 
+            if plot_wavelets:
                 if i < axs.shape[0]:
                     self.plot_wavelet(axs[i, -1], wavelet, tag)
                 else:
                     print(f'Skipped plotting wavelet {wavelet} for {tag}, no space for it')
 
-        for i in range(axs.shape[0] - 1, num_signals - 1, -1):
-            axs[i, -1].axis('off')
+        if plot_wavelets:
+            for i in range(axs.shape[0] - 1, num_signals - 1, -1):
+                axs[i, -1].axis('off')
