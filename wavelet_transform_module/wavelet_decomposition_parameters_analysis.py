@@ -2,15 +2,14 @@
 import matplotlib
 import pywt
 import matplotlib.pyplot as plt
+from pywt import Wavelet
 
 matplotlib.use("TkAgg")
 
 
-def view_wavelet_filters(wavelet_name: str):
+def view_wavelet_filters(wavelet: Wavelet):
     """View default wavelet filters."""
-    print(f'Analysing {wavelet_name=}')
-
-    wavelet = pywt.Wavelet(wavelet_name)
+    print(f'Analysing {wavelet=}')
 
     print("Decomposition low-pass filter (h):", wavelet.dec_lo)
     print("Decomposition high-pass filter (g):", wavelet.dec_hi)
@@ -18,21 +17,20 @@ def view_wavelet_filters(wavelet_name: str):
     print("Reconstruction high-pass filter (ĝ):", wavelet.rec_hi)
 
 
-def plot_wavelet(plot_ax, wavelet_name: str):
+def plot_wavelet(plot_ax, is_basic_wavelet: bool, wavelet: Wavelet):
     """Plot wavelet scaling and base function."""
-    print(f'Plotting {wavelet_name=}')
+    print(f'Plotting {wavelet=}')
 
-    wavelet = pywt.Wavelet(wavelet_name)
     phi, psi, x = wavelet.wavefun()
 
-    scaling_plot = plot_ax[0]
+    scaling_plot = plot_ax[0 + 2 * is_basic_wavelet]
     scaling_plot.plot(x, phi)
     scaling_plot.set_title(f"{wavelet_name} Scaling Function φ(x)")
     scaling_plot.set_xlabel("x")
     scaling_plot.set_ylabel("φ(x)")
     scaling_plot.grid(True)
 
-    wavelet_plot = plot_ax[1]
+    wavelet_plot = plot_ax[1 + 2 * is_basic_wavelet]
     wavelet_plot.plot(x, psi)
     wavelet_plot.set_title(f"{wavelet_name} Wavelet Function ψ(x)")
     wavelet_plot.set_xlabel("x")
@@ -41,13 +39,27 @@ def plot_wavelet(plot_ax, wavelet_name: str):
 
 
 if __name__ == '__main__':
-    wavelets_list = ['db4', 'db6', 'db12', 'db16']
+    wavelets_list = {
+        'db4': [None],
+        'db6': [None],
+        'db12': [None],
+        'db16': [None],
+    }
 
-    fig, axs = plt.subplots(len(wavelets_list), 2, figsize=(3 * len(wavelets_list), 4 * 2))
+    fig, axs = plt.subplots(len(wavelets_list), 4, figsize=(3 * len(wavelets_list), 4 * 2))
 
-    for i, wt in enumerate(wavelets_list):
-        view_wavelet_filters(wt)
-        plot_wavelet(axs[i], wt)
+    for i, wavelet_name in enumerate(wavelets_list):
+        wavelet_basic = pywt.Wavelet(wavelet_name)
+
+        view_wavelet_filters(wavelet_basic)
+        plot_wavelet(axs[i], False, wavelet_basic)
+
+        wavelet_configured = pywt.Wavelet(wavelet_name)
+
+        # TODO: apply different wavelet decomposition filters
+
+        view_wavelet_filters(wavelet_configured)
+        plot_wavelet(axs[i], True, wavelet_configured)
 
     plt.tight_layout()
     plt.show()
