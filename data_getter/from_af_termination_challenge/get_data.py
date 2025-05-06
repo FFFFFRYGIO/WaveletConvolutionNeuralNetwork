@@ -40,7 +40,7 @@ def get_from_af_termination_challenge(
 
         signal_subset_normalized = normalize_signal(signal_subset)
 
-        qrs_peaks = get_qrs_peaks(signal_subset_normalized, qrs_locs, seconds, fields['fs'])
+        qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'], qrs_locs, seconds)
 
         signals_list.append((signal_subset_normalized, tag, qrs_peaks, fields))
 

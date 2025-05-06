@@ -36,15 +36,17 @@ def get_from_github(
                 if label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
                     signal_subset_normalized = normalize_signal(signal_subset)
-                    return signal_subset_normalized, signal_tag, get_qrs_peaks(signal_subset_normalized), fields
+                    qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'])
+                    return signal_subset_normalized, signal_tag, qrs_peaks, fields
 
         case 'all':
             for source_signal, label in zip(source_signals, labels):
                 if signal_tag == 'all' or label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
                     signal_subset_normalized = normalize_signal(signal_subset)
+                    qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'])
                     signals_list.append(
-                        (signal_subset_normalized, signal_tag, get_qrs_peaks(signal_subset_normalized), fields)
+                        (signal_subset_normalized, signal_tag, qrs_peaks, fields)
                     )
 
         case _:
@@ -52,8 +54,9 @@ def get_from_github(
                 if signal_tag == 'all' or label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
                     signal_subset_normalized = normalize_signal(signal_subset)
+                    qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'])
                     signals_list.append(
-                        (signal_subset_normalized, signal_tag, get_qrs_peaks(signal_subset_normalized), fields)
+                        (signal_subset_normalized, signal_tag, qrs_peaks, fields)
                     )
                     amount -= 1
 
