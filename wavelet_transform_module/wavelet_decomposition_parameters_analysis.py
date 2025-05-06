@@ -22,7 +22,8 @@ def plot_wavelet(plot_ax, ord_number, wavelet_basic: Wavelet, wavelet_custom: Wa
     print(f'Plotting\n{wavelet_basic=}\nand\n{wavelet_custom=}')
 
     for i, wavelet in enumerate([wavelet_basic, wavelet_custom]):
-        phi, psi, x = wavelet.wavefun()
+        wf = wavelet.wavefun()
+        phi, psi, x = wf[0], wf[1], wf[2]
 
         scaling_plot = plot_ax[i, 0 + 2 * ord_number]
         scaling_plot.plot(x, phi)
