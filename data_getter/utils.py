@@ -45,11 +45,22 @@ def get_qrs_peaks(
     return peaks
 
 
-def normalize_signal(signal: NDArray) -> NDArray:
-    """Normalize ECG signal from -1 to 1."""
-    signal_max = max(signal)
-    signal_min = min(signal)
+def normalize_signal(signal: NDArray, normalization_mode: str = 'peak') -> NDArray:
+    """Normalize ECG signal from 0 to 1 or by dividing values by the biggest peak for the signal."""
 
-    normalized_signal = (signal - signal_min) / (signal_max - signal_min)
+    match normalization_mode:
+        case 'peak':
+            max_peak = np.max(np.abs(signal))
+
+            normalized_signal = signal / max_peak if max_peak else signal
+
+        case 'minmax':
+            signal_max = max(signal)
+            signal_min = min(signal)
+
+            normalized_signal = (signal - signal_min) / (signal_max - signal_min)
+
+        case _:
+            raise ValueError(f"{normalization_mode=} is not a valid normalization mode")
 
     return normalized_signal
