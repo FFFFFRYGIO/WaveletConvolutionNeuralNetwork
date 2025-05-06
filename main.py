@@ -6,7 +6,7 @@ from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_b
 from plotters.dwt_decomposition_plotter import DWTDecompositionPlotter
 from plotters.inverse_dwt_plotter import InverseDWTPlotter
 from plotters.signals_plotter import SignalsPlotter
-from wavelet_transform import discrete_wavelet_transform, inverse_discrete_wavelet_transform
+from wavelet_transform_module.wavelet_transform import discrete_wavelet_transform, inverse_discrete_wavelet_transform
 
 
 def get_signals_data(
