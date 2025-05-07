@@ -43,7 +43,7 @@ def inverse_dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: i
 
     signals_data = get_signals_data(signal_time)
 
-    inverse_dwt_levels_operations = [['A', 'D6'], ['D2', 'D1']]
+    inverse_dwt_levels_operations = [['A', f'D{decomposition_levels}'], ['D2', 'D1']]
 
     for signal, tag, qrs_peaks, fields in signals_data:
         print(f"{signal.shape=}, {tag=}, {qrs_peaks.shape=}, {fields['fs']=}")
