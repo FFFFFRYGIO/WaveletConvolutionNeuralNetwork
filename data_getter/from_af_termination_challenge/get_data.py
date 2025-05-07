@@ -15,7 +15,7 @@ DATA_FREQUENCY = 128  # From documentation
 
 
 def get_from_af_termination_challenge(
-        signal_tags: list[str], seconds: int
+        signal_tags: list[str], seconds: int, get_subsignals: bool = False
 ) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]:
     """Main function to get expected signals amount and types with the proper time."""
 
@@ -26,22 +26,27 @@ def get_from_af_termination_challenge(
 
         signal, fields = wfdb.rdsamp(record_path)
 
-        if signal.ndim == 2:
-            signal = signal[:, 0]
+        if get_subsignals:
+            signals = [signal[:, 0], signal[:, 1]] if signal.ndim == 2 else [signal]
 
-        try:
-            annotation = wfdb.rdann(record_path, 'qrs')
-            qrs_locs = annotation.sample
-        except FileNotFoundError:
-            print("⚠️Could not find qrs file.")
-            qrs_locs = []
+        else:
+            signals = [signal[:, 0]] if signal.ndim == 2 else [signal]
 
-        signal_subset = get_signal_subset(signal, fields['fs'], seconds)
+        for signal in signals:
 
-        signal_subset_normalized = normalize_signal(signal_subset)
+            try:
+                annotation = wfdb.rdann(record_path, 'qrs')
+                qrs_locs = annotation.sample
+            except FileNotFoundError:
+                print("⚠️Could not find qrs file.")
+                qrs_locs = []
 
-        qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'], qrs_locs, seconds)
+            signal_subset = get_signal_subset(signal, fields['fs'], seconds)
 
-        signals_list.append((signal_subset_normalized, tag, qrs_peaks, fields))
+            signal_subset_normalized = normalize_signal(signal_subset)
+
+            qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'], qrs_locs, seconds)
+
+            signals_list.append((signal_subset_normalized, tag, qrs_peaks, fields))
 
     return signals_list

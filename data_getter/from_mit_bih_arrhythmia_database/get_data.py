@@ -24,7 +24,7 @@ TAGS_SHIFTS = {
 
 
 def get_from_mit_bih_arrhythmia_database(
-        signal_tags: list[str], seconds: int
+        signal_tags: list[str], seconds: int, get_subsignals: bool = False
 ) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]:
     """Main function to get expected signals amount and types with the proper time."""
 
@@ -35,17 +35,21 @@ def get_from_mit_bih_arrhythmia_database(
 
         signal, fields = wfdb.rdsamp(record_path)
 
-        if signal.ndim == 2:
-            signal = signal[:, 0]
+        if get_subsignals:
+            signals = [signal[:, 0], signal[:, 1]] if signal.ndim == 2 else [signal]
 
-        sample_shift_seconds = TAGS_SHIFTS.get(tag, None)
+        else:
+            signals = [signal[:, 0]] if signal.ndim == 2 else [signal]
 
-        signal_subset = get_signal_subset(signal, fields['fs'], seconds, sample_shift_seconds=sample_shift_seconds)
+        for signal in signals:
+            sample_shift_seconds = TAGS_SHIFTS.get(tag, None)
 
-        signal_subset_normalized = normalize_signal(signal_subset)
+            signal_subset = get_signal_subset(signal, fields['fs'], seconds, sample_shift_seconds=sample_shift_seconds)
 
-        qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'])
+            signal_subset_normalized = normalize_signal(signal_subset)
 
-        signals_list.append((signal_subset_normalized, tag, qrs_peaks, fields))
+            qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'])
+
+            signals_list.append((signal_subset_normalized, tag, qrs_peaks, fields))
 
     return signals_list
