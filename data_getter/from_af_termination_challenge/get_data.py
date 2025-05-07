@@ -15,7 +15,7 @@ DATA_FREQUENCY = 128  # From documentation
 
 
 def get_from_af_termination_challenge(
-        signal_tags: list[str], seconds: int, get_subsignals: bool = False
+        signal_tags: list[str], seconds: int, get_subsignals: bool = False, normalization: str = 'peak',
 ) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]:
     """Main function to get expected signals amount and types with the proper time."""
 
@@ -43,7 +43,7 @@ def get_from_af_termination_challenge(
 
             signal_subset = get_signal_subset(signal, fields['fs'], seconds)
 
-            signal_subset_normalized = normalize_signal(signal_subset)
+            signal_subset_normalized = normalize_signal(signal_subset, normalization_mode=normalization)
 
             qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'], qrs_locs, seconds)
 

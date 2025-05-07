@@ -14,7 +14,7 @@ DATA_FREQUENCY = 128  # From documentation
 
 
 def get_from_github(
-        amount: str | int, signal_tag: str, seconds: int
+        amount: str | int, signal_tag: str, seconds: int, normalization: str = 'peak',
 ) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]:
     """Main ECGData function to get expected signals amount and types with the proper time."""
 
@@ -35,7 +35,7 @@ def get_from_github(
             for source_signal, label in zip(source_signals, labels):
                 if label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
-                    signal_subset_normalized = normalize_signal(signal_subset)
+                    signal_subset_normalized = normalize_signal(signal_subset, normalization_mode=normalization)
                     qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'])
                     return signal_subset_normalized, signal_tag, qrs_peaks, fields
 
@@ -43,7 +43,7 @@ def get_from_github(
             for source_signal, label in zip(source_signals, labels):
                 if signal_tag == 'all' or label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
-                    signal_subset_normalized = normalize_signal(signal_subset)
+                    signal_subset_normalized = normalize_signal(signal_subset, normalization_mode=normalization)
                     qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'])
                     signals_list.append(
                         (signal_subset_normalized, signal_tag, qrs_peaks, fields)
@@ -53,7 +53,7 @@ def get_from_github(
             for source_signal, label in zip(source_signals, labels):
                 if signal_tag == 'all' or label == signal_tag:
                     signal_subset = get_signal_subset(source_signal, DATA_FREQUENCY, seconds)
-                    signal_subset_normalized = normalize_signal(signal_subset)
+                    signal_subset_normalized = normalize_signal(signal_subset, normalization_mode=normalization)
                     qrs_peaks = get_qrs_peaks(signal_subset_normalized, fields['fs'])
                     signals_list.append(
                         (signal_subset_normalized, signal_tag, qrs_peaks, fields)
