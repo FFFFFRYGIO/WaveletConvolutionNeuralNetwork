@@ -1,15 +1,16 @@
 """Wavelet decomposition filters analysis."""
 import matplotlib
+import numpy as np
 import pywt
 import matplotlib.pyplot as plt
-from pywt import Wavelet, orthogonal_filter_bank
+from pywt import Wavelet, orthogonal_filter_bank, qmf
 
 matplotlib.use("TkAgg")
 
 
 def view_wavelet_filters(wavelet: Wavelet):
     """View default wavelet filters."""
-    print(f'Analysing {wavelet=}')
+    print(f'Analysing {wavelet.name=}')
 
     print("Decomposition low-pass filter (h):", wavelet.dec_lo)
     print("Decomposition high-pass filter (g):", wavelet.dec_hi)
@@ -55,15 +56,19 @@ if __name__ == '__main__':
         wavelet_basic = pywt.Wavelet(wavelet_name)
         view_wavelet_filters(wavelet_basic)
 
-        base_lo = wavelet_basic.dec_lo.copy()
-        new_lo = [
-            coef * (1.0 + (0.1 if idx == 0 else 0.0))
-            for idx, coef in enumerate(base_lo)
-        ]
+        base_lo = np.array(wavelet_basic.dec_lo, dtype=float)
+        new_lo = base_lo.copy()
+        new_lo[0] *= 1.0001
+        new_lo *= (np.sqrt(2) / new_lo.sum())
 
-        dec_lo, dec_hi, rec_lo, rec_hi = orthogonal_filter_bank(new_lo)
+        dec_hi = qmf(new_lo)
+        dec_lo, rec_lo, rec_hi = new_lo, new_lo[::-1], dec_hi[::-1]
 
-        wavelet_custom = Wavelet(wavelet_name + "_tweaked", filter_bank=(dec_lo, dec_hi, rec_lo, rec_hi))
+        wavelet_custom = Wavelet(
+            wavelet_name + "_tweaked",
+            filter_bank=(dec_lo, dec_hi, rec_lo, rec_hi)
+        )
+
         view_wavelet_filters(wavelet_custom)
 
         plot_wavelet(axs, i, wavelet_name, wavelet_basic, wavelet_custom)
