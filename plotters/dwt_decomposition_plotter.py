@@ -44,11 +44,17 @@ class DWTDecompositionPlotter(SignalsPlotter):
 
             for coef_number, coef in enumerate([cA] + cDs):
                 level_name = "A" if coef_number == 0 else f"D{len(cDs) - coef_number + 1}"
-                ax = axs[coef_number + 1, i]
+
+                if level_name == "A":
+                    ax_row_number = 1
+                else:
+                    ax_row_number = coef_number + 1 + num_levels - len([cA] + cDs)
+
+                ax = axs[ax_row_number, i]
                 time_coef = np.linspace(0, duration, num=len(coef))
                 ax.plot(time_coef, coef)
                 ax.set_title(f"Level {level_name} ({wavelet})")
-                ax.set_xlabel("Time [s]")
+                # ax.set_xlabel("Time [s]")
                 ax.set_xlim(0, duration)
                 ax.grid(True)
 
