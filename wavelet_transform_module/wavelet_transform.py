@@ -4,7 +4,7 @@ import pywt
 from numpy.typing import NDArray
 
 
-def discrete_wavelet_transform(signal: NDArray, wavelet, level: int = 2) -> tuple[NDArray, list[NDArray]]:
+def discrete_wavelet_transform(signal: NDArray, wavelet, level: int | None = None) -> tuple[NDArray, list[NDArray]]:
     """Run DWT."""
 
     if level == 2:
