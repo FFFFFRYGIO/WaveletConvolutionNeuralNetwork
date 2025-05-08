@@ -1,22 +1,9 @@
 """Main script to run expected analysis."""
-from numpy._typing import NDArray
-
-from data_getter.from_af_termination_challenge.get_data import get_from_af_termination_challenge
-from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
+from data_getter.get_signals_data import get_signals_data
 from plotters.dwt_decomposition_plotter import DWTDecompositionPlotter
 from plotters.inverse_dwt_plotter import InverseDWTPlotter
 from plotters.signals_plotter import SignalsPlotter
 from wavelet_transform_module.wavelet_transform import discrete_wavelet_transform, inverse_discrete_wavelet_transform
-
-
-def get_signals_data(
-        signal_time: int,
-) -> list[tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]]:
-    """Get specified number of signals with its details information."""
-    h_signals_data = get_from_mit_bih_arrhythmia_database(['100', '103'], signal_time)
-    a_signals_data = get_from_mit_bih_arrhythmia_database(['108', '113'], signal_time)
-    af_signals_data = get_from_af_termination_challenge(['n01', 'n02'], signal_time)
-    return h_signals_data + a_signals_data + af_signals_data
 
 
 def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
