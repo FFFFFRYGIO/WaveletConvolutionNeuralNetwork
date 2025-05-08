@@ -1,7 +1,7 @@
-"""InverseDWTPlotter class to gather and display signal statistical analysis."""
 import numpy as np
 from matplotlib import pyplot as plt
 from numpy._typing import NDArray
+from scipy.stats import lognorm
 
 from plotters.signals_plotter import SignalsPlotter
 
@@ -11,27 +11,28 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
 
     def __init__(self) -> None:
         super().__init__()
+        # Each entry: (signal, tag, qrs_peaks, freq, data_dist, detected_dist)
         self.signals_set: list[tuple[NDArray, str, NDArray, int, dict, dict]] = []
 
     def add_signal_with_analysis(
-            self, signal: NDArray, tag: str, qrs_peaks: NDArray, freq: int,
-            data_dist: dict, detected_dist: dict
+        self, signal: NDArray, tag: str, qrs_peaks: NDArray, freq: int,
+        data_dist: dict, detected_dist: dict
     ):
-        """Add signal to signals_set with its tag, qrs_peaks and frequency and wavelet transform."""
+        """Add signal with its statistical analysis results."""
         self.signals_set.append((signal, tag, qrs_peaks, freq, data_dist, detected_dist))
 
     def compute_plotting(self, **kwargs):
-        """Compute plotting signals with its statistical analysis."""
+        """Plot ECG signals and overlay histogram with fitted distributions."""
 
-        half_of_signals = int(len(self.signals_set) / 2)
+        half_of_signals = len(self.signals_set) // 2
 
         fig, axs = plt.subplots(
             nrows=2 * 2,
             ncols=half_of_signals,
             figsize=(3 * half_of_signals, 2 * 2 * 2),
             squeeze=False,
-            sharex='row',
-            sharey='row',
+            # sharex='row',
+            # sharey='row',
         )
 
         for signal_number, (signal, tag, qrs_peaks, freq, data_dist, detected_dist) in enumerate(self.signals_set):
@@ -40,19 +41,15 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
             bins = 100
             density = True
 
-            if signal_number < half_of_signals:
-                signal_plot = axs[0, signal_number]
-                dd_plot = axs[1, signal_number]
-            else:
-                signal_plot = axs[2, signal_number - half_of_signals]
-                dd_plot = axs[3, signal_number - half_of_signals]
+            row = 0 if signal_number < half_of_signals else 2
+            col = signal_number if signal_number < half_of_signals else signal_number - half_of_signals
 
-            self.plot_ecg_signal(signal_plot, signal, duration, freq, tag, qrs_peaks)
+            ax_signal = axs[row, col]
+            self.plot_ecg_signal(ax_signal, signal, duration, freq, tag, qrs_peaks)
 
-            # dd_plot.hist(signal, bins=bins, density=density)
+            ax_hist = axs[row + 1, col]
 
-            # 1) draw histogram and get the bin‐centers & densities
-            counts, bin_edges, _ = dd_plot.hist(
+            counts, bin_edges, _ = ax_hist.hist(
                 signal,
                 bins=bins,
                 density=density,
@@ -61,7 +58,7 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
             )
             centers = (bin_edges[:-1] + bin_edges[1:]) / 2
 
-            # 2) fit a quadratic (degree=2) polynomial to (centers, counts)
+            # Quadratic polynomial fit
             coeffs = np.polyfit(centers, counts, deg=2)
             poly = np.poly1d(coeffs)
 
@@ -70,7 +67,7 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
             ys = poly(xs)
 
             # 4) overlay the fit
-            dd_plot.plot(
+            ax_hist.plot(
                 xs,
                 ys,
                 'r-',
@@ -80,4 +77,23 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
                     f'{coeffs[0]:.3e}·x² + {coeffs[1]:.3e}·x + {coeffs[2]:.3e}'
                 )
             )
-            # dd_plot.legend()
+
+            # Overlay detected distribution (e.g., lognormal)
+            name = detected_dist.get('name')
+            params = detected_dist.get('params', ())
+            if name == 'lognorm' and len(params) >= 3:
+                shape, loc, scale = params
+                pdf_vals = lognorm.pdf(xs, shape, loc=loc, scale=scale)
+                ax_hist.plot(
+                    xs,
+                    pdf_vals,
+                    '--',
+                    lw=2,
+                    label=f'{name} fit'
+                )
+
+            ax_hist.set_title(f'{tag} Distribution')
+            # ax_hist.legend()
+
+        plt.tight_layout()
+        plt.show()
