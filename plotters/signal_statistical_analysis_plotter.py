@@ -21,7 +21,7 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
         """Add signal with its statistical analysis results."""
         self.signals_set.append((signal, tag, qrs_peaks, freq, data_dist, detected_dist))
 
-    def compute_plotting(self, **kwargs):
+    def compute_plotting(self, add_detected_distribution: bool = True):
         """Plot ECG signals and overlay histogram with fitted distributions."""
 
         half_of_signals = len(self.signals_set) // 2
@@ -56,44 +56,26 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
                 alpha=0.6,
                 label='Data'
             )
-            centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+            ax_hist.set_title(f'{tag} Distribution')
 
-            # Quadratic polynomial fit
-            coeffs = np.polyfit(centers, counts, deg=2)
-            poly = np.poly1d(coeffs)
+            if add_detected_distribution:
+                centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+                xs = np.linspace(centers.min(), centers.max(), 200)
 
-            # 3) evaluate the polynomial on a fine grid for a smooth line
-            xs = np.linspace(centers.min(), centers.max(), 200)
-            ys = poly(xs)
-
-            # 4) overlay the fit
-            ax_hist.plot(
-                xs,
-                ys,
-                'r-',
-                lw=2,
-                label=(
-                    f'Quad fit:\n'
-                    f'{coeffs[0]:.3e}·x² + {coeffs[1]:.3e}·x + {coeffs[2]:.3e}'
-                )
-            )
-
-            # Overlay detected distribution (e.g., lognormal)
-            name = detected_dist.get('name')
-            params = detected_dist.get('params', ())
-            if name == 'lognorm' and len(params) >= 3:
-                shape, loc, scale = params
-                pdf_vals = lognorm.pdf(xs, shape, loc=loc, scale=scale)
-                ax_hist.plot(
-                    xs,
-                    pdf_vals,
-                    '--',
-                    lw=2,
-                    label=f'{name} fit'
-                )
+                name = detected_dist.get('name')
+                params = detected_dist.get('params', ())
+                if name == 'lognorm' and len(params) >= 3:
+                    shape, loc, scale = params
+                    pdf_vals = lognorm.pdf(xs, shape, loc=loc, scale=scale)
+                    ax_hist.plot(
+                        xs,
+                        pdf_vals,
+                        '--',
+                        lw=2,
+                        label=f'{name} fit'
+                    )
 
             ax_hist.set_title(f'{tag} Distribution')
-            # ax_hist.legend()
 
         plt.tight_layout()
         plt.show()

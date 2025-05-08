@@ -87,6 +87,7 @@ def statistical_analysis(signal_time: int):
         kde_density = dist['kde']['density']
 
         detected_distribution = detect_distribution_type(signal, bins=100, use_ks=True)
+        print(detected_distribution)
 
         signals_plotter.add_signal_with_analysis(signal, tag, qrs_peaks, fields['fs'], hist_counts, detected_distribution)
 
