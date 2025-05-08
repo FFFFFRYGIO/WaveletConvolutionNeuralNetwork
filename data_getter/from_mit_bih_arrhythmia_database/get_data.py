@@ -24,7 +24,7 @@ TAGS_SHIFTS = {
 
 
 def get_from_mit_bih_arrhythmia_database(
-        signal_tags: list[str], seconds: int, get_subsignals: bool = False, normalization: str = 'peak',
+        signal_tags: list[str], seconds: int, get_subsignals: bool = False, normalization: str | None = 'peak',
 ) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]:
     """Main function to get expected signals amount and types with the proper time."""
 

@@ -60,6 +60,9 @@ def normalize_signal(signal: NDArray, normalization_mode: str = 'peak') -> NDArr
 
             normalized_signal = (signal - signal_min) / (signal_max - signal_min)
 
+        case None:
+            normalized_signal = signal
+
         case _:
             raise ValueError(f"{normalization_mode=} is not a valid normalization mode")
 

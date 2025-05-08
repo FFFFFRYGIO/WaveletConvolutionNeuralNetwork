@@ -6,7 +6,7 @@ from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_b
 
 
 def get_signals_data(
-        signal_time: int, amounts: dict[str, int] = None
+        signal_time: int, amounts: dict[str, int] = None, normalization: str | None = None
 ) -> list[tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]]:
     """Get specified number of signals with its details information."""
 
@@ -20,7 +20,7 @@ def get_signals_data(
         for tags_group, amount in amounts.items()
     }
 
-    h_signals_data = get_from_mit_bih_arrhythmia_database(signals_tags['NSR'], signal_time)
-    a_signals_data = get_from_mit_bih_arrhythmia_database(signals_tags['ARR'], signal_time)
-    af_signals_data = get_from_af_termination_challenge(signals_tags['AFT'], signal_time)
+    h_signals_data = get_from_mit_bih_arrhythmia_database(signals_tags['NSR'], signal_time, normalization=normalization)
+    a_signals_data = get_from_mit_bih_arrhythmia_database(signals_tags['ARR'], signal_time, normalization=normalization)
+    af_signals_data = get_from_af_termination_challenge(signals_tags['AFT'], signal_time, normalization=normalization)
     return h_signals_data + a_signals_data + af_signals_data
