@@ -31,7 +31,7 @@ class InverseDWTPlotter(SignalsPlotter):
 
         return max_num_of_inverse_dwt
 
-    def compute_plotting(self, add_decompositions: bool = False) -> None:
+    def compute_plotting(self, add_decompositions: bool = False, plot_wavelets: bool = True) -> None:
         """Plot all signals added to signals plotter."""
 
         squeeze_when_one_signal = False
@@ -45,7 +45,7 @@ class InverseDWTPlotter(SignalsPlotter):
 
         fig, axs = plt.subplots(
             nrows=1 + rows_for_decomposition + num_inverse_dwt,
-            ncols=num_signals + 1,
+            ncols=num_signals + 1 * plot_wavelets,
             figsize=(6 * (num_signals + 1), 2 * (1 + rows_for_decomposition + num_inverse_dwt)),
             squeeze=squeeze_when_one_signal,
             sharex='col',
@@ -77,10 +77,12 @@ class InverseDWTPlotter(SignalsPlotter):
                 ax.set_xlim(0, duration)
                 ax.grid(True)
 
-            if i < axs.shape[0]:
-                self.plot_wavelet(axs[i, -1], wavelet, tag)
-            else:
-                print(f'Skipped plotting wavelet {wavelet} for {tag}, no space for it')
+            if plot_wavelets:
+                if i < axs.shape[0]:
+                    self.plot_wavelet(axs[i, -1], wavelet, tag)
+                else:
+                    print(f'Skipped plotting wavelet {wavelet} for {tag}, no space for it')
 
-        for i in range(axs.shape[0] - 1, num_signals - 1, -1):
-            axs[i, -1].axis('off')
+        if plot_wavelets:
+            for i in range(axs.shape[0] - 1, num_signals - 1, -1):
+                axs[i, -1].axis('off')
