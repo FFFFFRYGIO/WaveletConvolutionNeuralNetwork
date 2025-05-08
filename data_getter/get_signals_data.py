@@ -4,11 +4,6 @@ from numpy._typing import NDArray
 from data_getter.from_af_termination_challenge.get_data import get_from_af_termination_challenge
 from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
 
-TAGS_AVAILABLE: {
-    'NSR': ['100', '103'],
-    'ARR': ['108', '113'],
-    'AFT': ['n01', 'n02'],
-}
 
 def get_signals_data(
         signal_time: int, amounts: dict[str, int] = None
@@ -18,8 +13,10 @@ def get_signals_data(
     if amounts is None:
         amounts = {'NSR': 2, 'ARR': 2, 'AFT': 2}
 
+    tags_available = dict(NSR=['100', '103'], ARR=['108', '113'], AFT=['n01', 'n02'])
+
     signals_tags = {
-        f'{tags_group}': TAGS_AVAILABLE[tags_group][:amount]
+        f'{tags_group}': tags_available[tags_group][:amount]
         for tags_group, amount in amounts.items()
     }
 
