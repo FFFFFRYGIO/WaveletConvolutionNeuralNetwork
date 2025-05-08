@@ -34,6 +34,42 @@ class SignalsPlotter(ABC):
         return max_num_levels + 1
 
     @staticmethod
+    def apply_statistics_on_plot(
+            plot_ax, signal: NDArray,
+            duration: float | None = None, freq: int | None = None,
+            qrs_peaks: NDArray | None = None,
+            color_for_range: bool = False,
+            hide_values_from_range: bool = False,
+    ):
+        """For given signal calculate statistics and display them on a given plot."""
+
+        mean_val = np.mean(signal)
+        std_val = np.std(signal)
+
+        plot_ax.axhline(mean_val, color='k', linestyle='--', linewidth=1, label='Mean')
+        plot_ax.axhline(mean_val + std_val, color='r', linestyle='-.', linewidth=1, label='+1 STD')
+        plot_ax.axhline(mean_val - std_val, color='r', linestyle='-.', linewidth=1, label='−1 STD')
+
+        if color_for_range:
+            plot_ax.fill_between(
+                signal, mean_val - std_val, mean_val + std_val,
+                color='gray', alpha=0.3, label='±1 STD region'
+            )
+
+        if hide_values_from_range:
+            if not (duration and freq):
+                raise ValueError(f'Both values needed to mask the signal {duration=}, {freq=}')
+
+            time_signal = np.linspace(0, duration, num=len(signal))
+            mask = (signal > mean_val + std_val) | (signal < mean_val - std_val)
+            masked_signal = np.where(mask, signal, np.nan)
+            plot_ax.plot(time_signal, masked_signal)
+
+        if qrs_peaks:
+            for qrs in qrs_peaks:
+                plot_ax.axvline(x=qrs / freq, color='r', linestyle='--', alpha=0.1)
+
+    @staticmethod
     def plot_ecg_signal(plot_ax, signal: NDArray, duration: float, freq: int, tag: str, qrs_peaks: NDArray):
         """Plot ecg signal with qrs_peaks."""
 
