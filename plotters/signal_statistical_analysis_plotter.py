@@ -30,7 +30,8 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
             ncols=len(self.signals_set),
             figsize=(10 * 2, 1 * len(self.signals_set)),
             squeeze=False,
-            sharex=True,
+            sharex='row',
+            sharey='row',
         )
 
         for signal_number, (signal, tag, qrs_peaks, freq, data_distribution) in enumerate(self.signals_set):
@@ -38,4 +39,8 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
 
             self.plot_ecg_signal(axs[0, signal_number], signal, duration, freq, tag, qrs_peaks)
 
+            bins = 100
+            density = True
+
             dd_plot = axs[1, signal_number]
+            dd_plot.hist(signal, bins=bins, density=density)

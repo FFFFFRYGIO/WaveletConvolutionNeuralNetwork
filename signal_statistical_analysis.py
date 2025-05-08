@@ -49,28 +49,28 @@ def data_distribution(
             }           # only if compute_kde=True and scipy installed
         }
     """
-    # Basic histogram
+    # Compute histogram (no display)
     hist, bin_edges = np.histogram(signal, bins=bins, density=density)
 
-    # Summary stats
-    mean = np.mean(signal)
-    median = np.median(signal)
-    std = np.std(signal)
-    mn, mx = np.min(signal), np.max(signal)
+    # Summary statistics
+    mean = float(np.mean(signal))
+    median = float(np.median(signal))
+    std = float(np.std(signal))
+    mn, mx = float(np.min(signal)), float(np.max(signal))
     percentiles = {p: float(np.percentile(signal, p)) for p in (5, 25, 75, 95)}
 
     result: Dict[str, Any] = {
         'histogram': hist,
         'bin_edges': bin_edges,
-        'mean': float(mean),
-        'median': float(median),
-        'std': float(std),
-        'min': float(mn),
-        'max': float(mx),
+        'mean': mean,
+        'median': median,
+        'std': std,
+        'min': mn,
+        'max': mx,
         'percentiles': percentiles
     }
 
-    # Optional KDE
+    # Optional KDE computation
     if compute_kde:
         if gaussian_kde is None:
             raise ImportError("scipy is required for KDE but is not installed.")
