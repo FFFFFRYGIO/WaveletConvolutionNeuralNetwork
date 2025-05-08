@@ -36,7 +36,8 @@ class SignalsPlotter(ABC):
     @staticmethod
     def apply_statistics_on_plot(
             plot_ax, signal: NDArray,
-            duration: float | None = None, freq: int | None = None,
+            duration: float | None = None,
+            freq: int | None = None,
             qrs_peaks: NDArray | None = None,
             color_for_range: bool = False,
             hide_values_from_range: bool = False,
@@ -65,7 +66,10 @@ class SignalsPlotter(ABC):
             masked_signal = np.where(mask, signal, np.nan)
             plot_ax.plot(time_signal, masked_signal)
 
-        if qrs_peaks:
+        if qrs_peaks is not None:
+            if not freq:
+                raise ValueError(f'Missing freq value, {freq=}')
+
             for qrs in qrs_peaks:
                 plot_ax.axvline(x=qrs / freq, color='r', linestyle='--', alpha=0.1)
 

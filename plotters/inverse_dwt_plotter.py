@@ -73,7 +73,7 @@ class InverseDWTPlotter(SignalsPlotter):
                 time_inverse_dwt = np.linspace(0, duration, num=len(inverse_dwt))
                 ax.plot(time_inverse_dwt, inverse_dwt)
 
-                self.apply_statistics_on_plot(ax, signal, qrs_peaks=qrs_peaks)
+                self.apply_statistics_on_plot(ax, signal, freq=freq, qrs_peaks=qrs_peaks)
 
                 ax.set_title(f"Inverse DWT for {coeffs_names} ({wavelet})")
                 ax.set_xlabel("Time [s]")
