@@ -6,7 +6,7 @@ from plotters.dwt_decomposition_plotter import DWTDecompositionPlotter
 from plotters.inverse_dwt_plotter import InverseDWTPlotter
 from plotters.signal_statistical_analysis_plotter import SignalStatisticalAnalysisPlotter
 from plotters.signals_plotter import SignalsPlotter
-from signal_statistical_analysis import data_distribution
+from signal_statistical_analysis import data_distribution, detect_distribution_type
 from wavelet_transform_module.wavelet_transform import discrete_wavelet_transform, inverse_discrete_wavelet_transform
 
 
@@ -79,14 +79,16 @@ def statistical_analysis(signal_time: int):
         hist_counts = dist['histogram']
         bin_edges = dist['bin_edges']
 
-        print("Mean:", dist['mean'])
-        print("Median:", dist['median'])
-        print("5th percentile:", dist['percentiles'][5])
+        # print("Mean:", dist['mean'])
+        # print("Median:", dist['median'])
+        # print("5th percentile:", dist['percentiles'][5])
 
         xs = dist['kde']['xs']
         kde_density = dist['kde']['density']
 
-        signals_plotter.add_signal_with_analysis(signal, tag, qrs_peaks, fields['fs'], hist_counts)
+        detected_distribution = detect_distribution_type(signal, bins=100, use_ks=True)
+
+        signals_plotter.add_signal_with_analysis(signal, tag, qrs_peaks, fields['fs'], hist_counts, detected_distribution)
 
     signals_plotter.compute_plotting()
 
