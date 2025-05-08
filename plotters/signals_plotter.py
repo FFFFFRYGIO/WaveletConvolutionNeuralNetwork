@@ -14,6 +14,9 @@ matplotlib.use("TkAgg")
 class SignalsPlotter(ABC):
     """SignalsPlotter class for specific signals plotters that contains main implementations."""
 
+    def __init__(self) -> None:
+        matplotlib.use("TkAgg")
+
     @abstractmethod
     def add_signal_with_analysis(self):
         """Add signal to signals_set with its tag, qrs_peaks and frequency and wavelet transform."""

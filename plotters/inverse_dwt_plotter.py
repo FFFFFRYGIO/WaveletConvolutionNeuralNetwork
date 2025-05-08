@@ -10,6 +10,7 @@ class InverseDWTPlotter(SignalsPlotter):
     """DWTDecompositionPlotter class to gather and display signal analysis with wavelets and wavelet transform."""
 
     def __init__(self) -> None:
+        super().__init__()
         # signals_set element: signal, tag, qrs_peaks, freq, cA, cDs, wavelet, inverse_dwt_list (coeffs, inverse_dwt)
         self.signals_set: list[tuple[
             NDArray, str, NDArray, int, NDArray, NDArray, str, list[tuple[list[str], NDArray]]
