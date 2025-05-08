@@ -65,7 +65,7 @@ def statistical_analysis(signal_time: int):
 
     signals_plotter = SignalStatisticalAnalysisPlotter()
 
-    signals_data = get_signals_data(signal_time)
+    signals_data = get_signals_data(signal_time, normalization=None) + get_signals_data(signal_time, normalization='peak')
 
     for signal, tag, qrs_peaks, fields in signals_data:
         dist = data_distribution(

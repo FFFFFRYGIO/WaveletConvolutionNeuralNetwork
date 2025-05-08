@@ -6,7 +6,7 @@ from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_b
 
 
 def get_signals_data(
-        signal_time: int, amounts: dict[str, int] = None, normalization: str | None = None
+        signal_time: int, amounts: dict[str, int] = None, normalization: str | None = 'peak'
 ) -> list[tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]]:
     """Get specified number of signals with its details information."""
 

@@ -25,10 +25,12 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
     def compute_plotting(self, **kwargs):
         """Compute plotting signals with its statistical analysis."""
 
+        half_of_signals = int(len(self.signals_set) / 2)
+
         fig, axs = plt.subplots(
-            nrows=2,
-            ncols=len(self.signals_set),
-            figsize=(10 * 2, 1 * len(self.signals_set)),
+            nrows=2 * 2,
+            ncols=half_of_signals,
+            figsize=(3 * half_of_signals, 2 * 2 * 2),
             squeeze=False,
             sharex='row',
             sharey='row',
@@ -37,10 +39,16 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
         for signal_number, (signal, tag, qrs_peaks, freq, data_distribution) in enumerate(self.signals_set):
             duration = len(signal) / freq
 
-            self.plot_ecg_signal(axs[0, signal_number], signal, duration, freq, tag, qrs_peaks)
-
             bins = 100
             density = True
 
-            dd_plot = axs[1, signal_number]
+            if signal_number < half_of_signals:
+                signal_plot = axs[0, signal_number]
+                dd_plot = axs[1, signal_number]
+            else:
+                signal_plot = axs[2, signal_number - half_of_signals]
+                dd_plot = axs[3, signal_number - half_of_signals]
+
+            self.plot_ecg_signal(signal_plot, signal, duration, freq, tag, qrs_peaks)
+
             dd_plot.hist(signal, bins=bins, density=density)
