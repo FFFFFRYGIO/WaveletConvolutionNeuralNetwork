@@ -24,3 +24,32 @@ def get_signals_data(
     a_signals_data = get_from_mit_bih_arrhythmia_database(signals_tags['ARR'], signal_time, normalization=normalization)
     af_signals_data = get_from_af_termination_challenge(signals_tags['AFT'], signal_time, normalization=normalization)
     return h_signals_data + a_signals_data + af_signals_data
+
+
+def get_signals_data_from_pywt():
+    """Function to get example data from pywt module"""
+
+    import matplotlib
+    import numpy as np
+    import pywt.data
+    from matplotlib import pyplot as plt
+
+    matplotlib.use("TkAgg")
+
+    signal = pywt.data.ecg()
+
+    freq = 1
+    duration = len(signal) / freq
+    time_signal = np.linspace(0, duration, num=len(signal))
+    # qrs_peaks = get_qrs_peaks(signal, freq)
+
+    plt.plot(time_signal, signal)
+    plt.title(f"ECG: with QRS (l={len(signal)})")
+    plt.xlabel("Time [s]")
+    plt.ylabel("Amplitude [mV]")
+    plt.xlim(0, duration)
+    plt.grid(True)
+    # for qrs in qrs_peaks:
+    #     plt.axvline(x=qrs / freq, color='r', linestyle='--', alpha=0.1)
+
+    plt.show()
