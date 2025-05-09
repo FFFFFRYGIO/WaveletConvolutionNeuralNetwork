@@ -75,7 +75,5 @@ class SignalStatisticalAnalysisPlotter(SignalsPlotter):
                         label=f'{name} fit'
                     )
 
-            ax_hist.set_title(f'{tag} Distribution')
-
         plt.tight_layout()
         plt.show()
