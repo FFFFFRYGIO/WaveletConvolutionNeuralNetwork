@@ -1,0 +1,381 @@
+\documentclass[12pt, a4paper, twoside]{scrartcl}
+
+\usepackage[left=20mm,right=20mm,top=25mm,bottom=25mm,bindingoffset=10mm]{geometry}
+\usepackage[T1]{fontenc}
+% \usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{mathptmx}
+\usepackage{courier}
+\usepackage[printonlyused]{acronym}
+\usepackage{hyperref}
+%\usepackage{url}
+\usepackage{xurl}
+
+\usepackage[normalem]{ulem}
+
+\usepackage{sectsty}
+\allsectionsfont{\normalfont\bfseries\fontsize{14}{18}\selectfont}
+
+\usepackage[titles]{tocloft}
+\setcounter{tocdepth}{2}
+\renewcommand{\cftsecfont}{\fontsize{12}{14}\selectfont}
+\renewcommand{\cftsecpagefont}{\fontsize{12}{14}\selectfont}
+\renewcommand{\cftsecleader}{\fontsize{12}{14}\selectfont\cftdotfill{1}}
+\renewcommand{\cftsecindent}{0mm}
+\renewcommand{\cftsecnumwidth}{22mm}
+\renewcommand{\cftsecaftersnum}{. }
+\renewcommand{\cftbeforesecskip}{2mm}
+
+\renewcommand{\cftsubsecfont}{\fontsize{11}{13}\selectfont}
+\renewcommand{\cftsubsecpagefont}{\fontsize{11}{13}\selectfont}
+\renewcommand{\cftsubsecindent}{5mm}
+\renewcommand{\cftsubsecnumwidth}{8mm}
+\renewcommand{\cftsubsecaftersnum}{. }
+\renewcommand{\cftbeforesubsecskip}{2mm}
+\renewcommand{\cftsubsecleader}{\fontsize{11}{13}\selectfont\cftdotfill{1}}
+
+\renewcommand{\cftsubsubsecfont}{\fontsize{11}{13}\selectfont}
+\renewcommand{\cftsubsubsecpagefont}{\fontsize{11}{13}\selectfont}
+\renewcommand{\cftsubsubsecindent}{5mm}
+\renewcommand{\cftsubsubsecnumwidth}{12mm}
+\renewcommand{\cftsubsubsecaftersnum}{. }
+\renewcommand{\cftbeforesubsubsecskip}{0mm}
+\renewcommand{\cftsubsubsecleader}{\fontsize{11}{13}\selectfont\cftdotfill{1}}
+
+\renewcommand{\cftfigindent}{0mm}
+\renewcommand{\cftfignumwidth}{15mm}
+\renewcommand{\cftfigpresnum}{Rys. }
+\renewcommand{\cftfigaftersnum}{. }
+\renewcommand{\cftfigleader}{\normalfont\cftdotfill{1}}
+
+\renewcommand{\cfttabindent}{0mm}
+\renewcommand{\cfttabnumwidth}{15mm}
+\renewcommand{\cfttabpresnum}{Tab. }
+\renewcommand{\cfttabaftersnum}{. }
+\renewcommand{\cfttabfont}{\normalfont}
+\renewcommand{\cfttableader}{\normalfont\cftdotfill{1}}
+
+\usepackage{amsmath,amsfonts,amsthm}
+
+\usepackage{color}
+\usepackage{float}
+
+\usepackage{verbatimbox}
+\def\verbarg{{\fontsize{11}{13}\selectfont\makebox[7mm]{\arabic{VerbboxLineNo}}}\hspace{12mm}}
+
+\usepackage[plain]{algorithm}
+\floatstyle{plaintop}
+\restylefloat{algorithm}
+\floatname{algorithm}{Alg.}
+
+\usepackage[pdftex]{graphicx}
+
+\renewcommand\thesection{Chapter \Roman{section}}
+\renewcommand\thesubsection{\Roman{section}.\arabic{subsection}}
+
+\usepackage{longtable}
+\usepackage[font=bf, labelfont=bf, belowskip=-0mm]{caption}
+% \captionsetup[figure]{name=Rys., labelsep=period}
+% \captionsetup[table]{name=Tab.,  labelsep=period}
+% \captionsetup[lstlisting]{margin=0pt, font=bf, labelsep=period}
+% \captionsetup[algorithm]{font=bf, labelsep=period}
+
+\usepackage{listings}
+\usepackage{color}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[RO, LE]{\thepage}
+\fancyhead[RE, LO]{}
+\fancyfoot{}
+\renewcommand\headrulewidth{0pt}
+
+\fancypagestyle{firststyle}{
+\fancyhead[RO, LE]{}
+\fancyhead[RE, LO]{}
+}
+
+\setlength\parindent{27pt}
+
+\newcommand{\inserttitlepage}{
+    \thispagestyle{firststyle}
+    \begin{center}
+        \fontsize{22}{14}\textbf{MILITARY~UNIVERSITY~OF~TECHNOLOGY}\\
+        \fontsize{12}{10}\textbf{named after Jarosław Dąbrowski}
+    \end{center}
+    \vspace{-7mm}
+    \rule{\linewidth}{0.5pt}
+    \begin{center}
+        \fontsize{20}{10}{\textbf{FACOULTY~OF~CYBERNETICS}}
+    \end{center}
+
+    \vspace{5mm}
+
+    \begin{center}
+        \includegraphics[width=40mm]{./WAT.png}
+    \end{center}
+
+    \vspace{0mm}
+
+    \begin{center}
+        {{\fontsize{26}{10} \selectfont {DIPLOMA THESIS}}}\\
+        \vspace{3mm}
+        {\fontsize{20}{10} \selectfont \stopien}
+    \end{center}
+
+    \vspace{5mm}
+
+    \begin{longtable*}{p{.18\textwidth} p{.75\textwidth}}
+        \fontsize{14}{20}\selectfont{Thesis topic:} &\fontsize{16}{20}\selectfont{\textbf{\noindent\temat}} \\
+    \end{longtable*}
+
+    \vspace{5mm}
+
+    \begin{center}
+        \textrm{\textbf{\fontsize{14}{20}\selectfont{\kierunek}}}\\
+        \scriptsize\textrm{...........................................................................................................\\{{\scriptsize{(field of study)}}}}\\~\\
+        \vspace{5mm}
+        \textrm{\textbf{\fontsize{14}{20}\selectfont{\specjalnosc}}}\\
+        \scriptsize\textrm{...........................................................................................................\\{{\scriptsize{(specialization)}}}}\\~\\
+    \end{center}
+
+    \vspace{5mm}
+
+    \begin{longtable*}{p{.5\textwidth} p{.5\textwidth}}
+        \textrm{Candidate:}\vspace{5mm} & 	\textrm{Supervisor:}\\
+        \textrm{\textbf{\autor}}  & \textrm{\textbf{\promotor}} \\
+    \end{longtable*}
+
+    \begin{center}
+    \rule{\linewidth}{0.5pt}
+    \fontsize{12}{10} \textbf{\data} \end{center}
+
+
+    \clearpage
+
+    \thispagestyle{firststyle}
+
+    \fontsize{14}{20} \selectfont{\textbf{OŚWIADCZENIE}}\\
+
+    \begin{center}
+        \fontsize{14}{20} \selectfont \textit{\ifdefined\zgoda  Wyrażam zgodę / \sout{nie wyrażam zgody} \else \sout{Wyrażam zgodę} / {nie wyrażam zgody} \fi $^{*}$\\na udostępnianie mojej pracy przez Archiwum WAT}
+    \end{center}
+
+    ~\\
+
+    \begin{longtable*}{p{.6\textwidth} c}
+    Dnia ...................... & 	....................................\\
+    ~ & \fontsize{10}{10} \selectfont (podpis)\\
+    \end{longtable*}
+    \textit{$^{*}$ Niepotrzebne skreślić}
+
+    % \begin{figure}[H]
+    % \begin{center}
+    %     \includegraphics[width=1\textwidth]{files/zgoda.jpeg}
+    % \end{center}
+    % \end{figure}
+
+    \newpage
+    \normalsize
+
+    \tableofcontents
+
+    \newpage
+}
+
+% \defcaptionname{polish}{\refname}{Bibliografia}
+
+\definecolor{mygray}{rgb}{0.95,0.95,0.95}
+
+% \renewcommand{\lstlistingname}{Kod.}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    numbers=left,
+    numberstyle=\ttfamily\footnotesize\color{black},
+    numbersep=5pt,
+    showspaces=false,
+    breaklines=true,
+    keepspaces=true,
+    tabsize=2,
+    xleftmargin=20pt,
+    framexleftmargin=20pt,
+    captionpos=tc,
+    backgroundcolor=\color{mygray},
+    keywordstyle=\color{black},
+    inputencoding=utf8
+}
+
+\newcommand{\source}[1]{\vspace{0mm} \noindent\fontsize{10}{10}\selectfont{Źródło: {#1}}\normalsize\vspace{0mm}}
+
+\usepackage{todonotes}
+\newcommand{\TODO}[1]{\todo[color=red!50,inline]{\textbf{TODO}: #1}}
+\newcommand{\kw}[1]{\todo[color=green!40,inline]{\textbf{KW}: #1}}
+\newcommand{\ms}[1]{\todo[color=orange!40,inline]{\textbf{MS}: #1}}
+
+\newcommand{\listequationsname}{List of Equations}
+\newlistof{myequations}{equ}{\listequationsname}
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+\setlength{\cftmyequationsnumwidth}{2.5em}% Width of equation number in List of Equations
+
+\usepackage{xcolor}
+
+% Definicje zmiennych dla strony tytułowej
+\newcommand{\kierunek}{COMPUTER SCIENCE}
+\newcommand{\specjalnosc}{DATA ANALYSIS}
+\newcommand{\stopien}{STUDIES II$^{\mathrm{o}}$} %Odpowiednie usunąć
+\newcommand{\temat}{Wavelet neuronal net for chosen application on medical signals}
+\newcommand{\data}{Warsaw 2025}
+\newcommand{\autor}{eng. Radosław RELIDZYŃSKI}
+\newcommand{\promotor}{prof. dr habil. eng. Andrzej WALCZAK}
+\newcommand{\zgoda}{TAK} %W przypadku braku zgody zakomentować tą linię
+
+\begin{document}
+
+
+% Wywołanie strony tytułowej
+\inserttitlepage
+
+
+% Introduction
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+
+The main task of my thesis is to perform some experiments to investigate how to combine wavelet transformation signal decomposition and convolutional neural networks to create a tool that will detect diseases in \ac{ECG} heartbeat signal.
+
+\clearpage
+
+
+% Theoretical introduction to the topic
+\section{Theoretical introduction to the topic}
+
+The following sub-chapters cover an introduction to the \ac{ECG} signal, the wavelet transform, and neural networks. In the subsequent chapters of this thesis, I will apply the acquired theoretical knowledge and integrate it to develop a wavelet neural network.
+
+\subsection{\ac{ECG} signal}
+
+Electrocardiography is the process of producing an electrocardiogram (ECG or EKG), a recording of the heart's electrical activity through repeated cardiac cycles.\cite{Wiki:electrocardiography}
+
+\subsubsection{Electromagnetics impulses}
+
+\subsubsection{\ac{QRS} complex}
+
+\subsubsection{Heart diseases and their impact on \ac{ECG}}
+
+\subsection{Wavelet transform}
+
+\subsubsection{What is a wavelet?}
+
+\subsubsection{What is a wavelet transform?}
+
+\subsubsection{Wavelet transform on \ac{ECG} signal}
+
+\subsubsection{What is \ac{DWT}?}
+
+\subsection{What is \ac{CNN}?}
+
+\subsection{What is \ac{WCNN}?}
+
+\clearpage
+
+
+% My plan for \ac{WCNN} creation
+\section{My plan for \ac{WCNN} creation}
+
+\subsection{Neural network architecture}
+
+\subsection{Using \ac{DWT} in \ac{WCNN}}
+
+\subsection{Learning process flow}
+
+\clearpage
+
+
+% Data source description
+\section{Data source description}
+
+\subsection{Continous \ac{ECG} signal}
+
+\subsection{Source of data}
+
+\clearpage
+
+
+% My \ac{WCNN} realization
+\section{My \ac{WCNN} realization}
+
+\subsection{Techonogies used to create \ac{WCNN}}
+
+\subsection{Creating \ac{WCNN}}
+
+\subsection{Creating learning process}
+
+\subsection{Creating full tool for the research}
+
+\clearpage
+
+
+% \ac{WCNN} implementation
+\section{\ac{WCNN} implementation}
+
+\subsection{Techonogies used to create \ac{WCNN}}
+
+\subsection{Creating \ac{WCNN}}
+
+\subsection{Creating learning process}
+
+\subsection{Creating full tool for the research}
+
+\clearpage
+
+
+% Testing \ac{WCNN} model
+\section{Testing \ac{WCNN} model}
+
+\subsection{Learning process}
+
+\subsection{Testing model}
+
+confusion matrix
+
+\subsection{Analysis of testing results}
+
+\clearpage
+
+
+\section*{Summary}
+
+In short,...
+
+\clearpage
+
+
+% Bibliografia
+\bibliography{references}
+\bibliographystyle{plain}
+\addcontentsline{toc}{section}{References}
+\clearpage
+
+\section*{Acronyms}
+\addcontentsline{toc}{section}{Acronyms}
+\input{chapters/acronyms}
+\clearpage
+
+\section*{Glossary}
+\addcontentsline{toc}{section}{Glossary}
+\clearpage
+
+\listoffigures
+\addcontentsline{toc}{section}{List of Figures}
+\clearpage
+
+\listoftables
+\addcontentsline{toc}{section}{List of Tables}
+\clearpage
+
+% \renewcommand{\lstlistlistingname}{Spis kodów źródłowych}
+\lstlistoflistings
+\addcontentsline{toc}{section}{Listings}
+
+\end{document}
