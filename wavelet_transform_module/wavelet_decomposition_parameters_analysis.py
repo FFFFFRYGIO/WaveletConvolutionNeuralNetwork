@@ -82,6 +82,28 @@ if __name__ == '__main__':
             view_wavelet_filters(wavelet_custom2)
             plot_wavelet(axs[2, 0 + 2 * i], axs[2, 1 + 2 * i], wavelet_custom2)
 
+            # # Custom wavelet built with orthogonal_filter_bank
+            #
+            # phi, psi, x = wavelet_basic.wavefun()
+            #
+            # filters_for_customizing_wavelets = [
+            #     wavelet_basic.dec_lo,
+            #     # wavelet_basic.dec_hi,  # MALFUNCTION
+            #     wavelet_basic.rec_lo,
+            #     # wavelet_basic.rec_hi,  # MALFUNCTION
+            # ]
+            #
+            # for filter_num, filter_set in enumerate(filters_for_customizing_wavelets):
+            #     filters = pywt.orthogonal_filter_bank(filter_set)
+            #
+            #     wavelet_custom_temp = pywt.Wavelet(
+            #         name="custom_db",
+            #         filter_bank=filters
+            #     )
+            #
+            #     view_wavelet_filters(wavelet_custom_temp)
+            #     plot_wavelet(axs[filter_num + 2, 0 + 2 * i], axs[filter_num + 2, 1 + 2 * i], wavelet_custom_temp)
+
     else:
         fig, axs = plt.subplots(
             nrows=len(wavelets_list),
