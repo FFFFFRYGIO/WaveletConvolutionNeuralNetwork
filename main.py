@@ -32,7 +32,7 @@ def inverse_dwt_plotting(wavelets_list: list[str], signal_time: int, decompositi
 
     signals_plotter = InverseDWTPlotter()
 
-    signals_data = get_signals_data(signal_time)
+    signals_data = get_signals_data(signal_time, amounts={'NSR': 1, 'ARR': 1, 'AFT': 1})
 
     inverse_dwt_levels_operations = [
         ['A', f'D{decomposition_levels}'],
@@ -97,12 +97,12 @@ def statistical_analysis(signal_time: int):
 def main():
     """Get signals, create wavelet transforms, plot results."""
 
-    analysis_mode = 'stats'
-    signal_time = 10
+    analysis_mode = 'inverse_dwt'
+    signal_time = 30
 
     match analysis_mode:
         case 'inverse_dwt':
-            inverse_dwt_plotting(['db4', 'sym4'], signal_time, decomposition_levels=6)
+            inverse_dwt_plotting(['db4', 'db4_reb', 'db4_cust'], signal_time, decomposition_levels=6)
 
         case 'dwt':
             dwt_plotting('db4', signal_time, decomposition_levels=6)
@@ -110,7 +110,7 @@ def main():
         case 'stats':
             statistical_analysis(signal_time)
 
-    SignalsPlotter.display_plots(maximized=False)
+    SignalsPlotter.display_plots(maximized=True)
 
 
 if __name__ == '__main__':
