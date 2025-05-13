@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     if plot_custom_wavelet:
         fig, axs = plt.subplots(
-            nrows=2,
+            nrows=3,
             ncols=len(wavelets_list) * 2,
             figsize=(10 * 2, 2 * len(wavelets_list)),
             squeeze=False,
@@ -73,6 +73,14 @@ if __name__ == '__main__':
 
             view_wavelet_filters(wavelet_custom)
             plot_wavelet(axs[1, 0 + 2 * i], axs[1, 1 + 2 * i], wavelet_custom)
+
+            wavelet_custom2 = Wavelet(
+                wavelet_name + "_mine",
+                filter_bank=wavelet_basic.filter_bank
+            )
+
+            view_wavelet_filters(wavelet_custom2)
+            plot_wavelet(axs[2, 0 + 2 * i], axs[2, 1 + 2 * i], wavelet_custom2)
 
     else:
         fig, axs = plt.subplots(
