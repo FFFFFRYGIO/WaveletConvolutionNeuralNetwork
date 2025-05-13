@@ -38,7 +38,7 @@ def get_qrs_peaks(
 
     peaks, _ = find_peaks(
         signal,
-        height=signal.mean() + 0.4,
+        height=0.5,
         distance=int(signal_frequency / 10)
     )
 
