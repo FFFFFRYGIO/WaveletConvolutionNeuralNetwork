@@ -45,11 +45,11 @@ def get_qrs_peaks(
     return peaks
 
 
-def normalize_signal(signal: NDArray, normalization_mode: str = 'peak') -> NDArray:
-    """Normalize ECG signal from 0 to 1 or by dividing values by the biggest peak for the signal."""
+def normalize_signal(signal: NDArray, normalization_mode: str = 'max-abs') -> NDArray:
+    """Normalize ECG signal my max-abs (from -1 to 1) or minmax (from 0 to 1)."""
 
     match normalization_mode:
-        case 'peak':
+        case 'max-abs':
             max_peak = np.max(np.abs(signal))
 
             normalized_signal = signal / max_peak if max_peak else signal
