@@ -53,6 +53,7 @@ def get_wavelet(wavelet_name: str) -> pywt.Wavelet:
 
     return pywt.Wavelet(wavelet_name)
 
+
 def discrete_wavelet_transform(signal: NDArray, wavelet_name: str, level: int | None = None) -> tuple[NDArray, list[NDArray]]:
     """Run DWT."""
 
