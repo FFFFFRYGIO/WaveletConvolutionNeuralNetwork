@@ -4,18 +4,20 @@ import numpy as np
 from matplotlib import pyplot as plt
 from numpy.typing import NDArray
 
+from official_scripts.dwt_analysis.ecg_signal import ECGSignalContent
+
 matplotlib.use("TkAgg")
 
 
 class DWTExperimentsPlotter:
     """SignalsPlotter class for specific signals plotters that contains main implementations."""
 
-    def __init__(self, signals_contents: list[dict], signals_frequency: int) -> None:
+    def __init__(self, signals_contents: list[ECGSignalContent], signals_frequency: int) -> None:
         matplotlib.use("TkAgg")
         self.signals_contents = signals_contents
         self.fs: int = signals_frequency
-        self.larges_dwt = max([len(signals_content['dwt']) for signals_content in signals_contents])
-        self.larges_idwt = max([len(signals_content['idwt']) for signals_content in signals_contents])
+        self.larges_dwt = max([len(signals_content.dwt_decomposition) for signals_content in signals_contents])
+        self.larges_idwt = max([len(signals_content.dwt_reconstructions) for signals_content in signals_contents])
         self.fig, self.axs = None, None
 
     def compute_plotting(self):
