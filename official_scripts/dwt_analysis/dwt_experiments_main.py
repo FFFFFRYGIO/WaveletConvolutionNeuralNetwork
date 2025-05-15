@@ -10,6 +10,7 @@ def main():
     """Run DWT and IDWT experiments."""
     seconds = 5
     signal_amounts = {'ARR': 1, 'CHF': 1, 'NSR': 1}
+    normalize_denoise_combinations = [[False, False], [True, False], [True, True], [False, True]]
     wavelets = ['db4']
     decomposition_levels = 6
     reconstruction_combinations_set: list[list[str]] = []
@@ -19,7 +20,9 @@ def main():
     signals_contents_objects_list: list[ECGSignalContent] = []
     for wavelet in wavelets:
         for signal, tag in signals_data:
-            signals_contents_objects_list.append(ECGSignalContent(signal, tag, frequency, wavelet))
+            for normalize, denoise in normalize_denoise_combinations:
+                signal_object = ECGSignalContent(signal, tag, frequency, wavelet, normalize, denoise)
+                signals_contents_objects_list.append(signal_object)
 
     signals_contents_dicts: list[dict[str, tuple[str, NDArray] | list[tuple[str, NDArray]]]] = []
     for signal_content_object in signals_contents_objects_list:
