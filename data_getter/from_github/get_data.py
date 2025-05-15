@@ -14,7 +14,7 @@ DATA_FREQUENCY = 128  # From documentation
 
 
 def get_from_github(
-        amount: str | int, signal_tag: str, seconds: int, normalization: str = 'max-abs',
+        amount: str | int, signal_tag: str, seconds: int | None, normalization: str = 'max-abs',
 ) -> tuple[NDArray, str, NDArray, dict[str, int]] | tuple[list[tuple[NDArray, str, NDArray], dict[str, int]]]:
     """Main ECGData function to get expected signals amount and types with the proper time."""
 

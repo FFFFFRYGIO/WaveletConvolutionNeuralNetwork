@@ -10,7 +10,7 @@ from signal_statistical_analysis import data_distribution, detect_distribution_t
 from wavelet_transform_module.wavelet_transform import discrete_wavelet_transform, inverse_discrete_wavelet_transform
 
 
-def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
+def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int | None = 2):
     """Get signal, get wavelet transforms, finally plot them."""
 
     signals_plotter = DWTDecompositionPlotter()
@@ -27,7 +27,7 @@ def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int = 2):
     signals_plotter.compute_plotting(plot_wavelets=False)
 
 
-def inverse_dwt_plotting(wavelets_list: list[str], signal_time: int, decomposition_levels: int = 2):
+def inverse_dwt_plotting(wavelets_list: list[str], signal_time: int | None, decomposition_levels: int | None = 2):
     """Get signals, get wavelet transforms, finally plot different inverse dwt for them."""
 
     signals_plotter = InverseDWTPlotter()
@@ -100,13 +100,14 @@ def main():
 
     analysis_mode = 'inverse_dwt'
     signal_time = 30
+    decomposition_levels = None
 
     match analysis_mode:
         case 'inverse_dwt':
-            inverse_dwt_plotting(['db4', 'db4_reb', 'db4_cust'], signal_time, decomposition_levels=6)
+            inverse_dwt_plotting(['db4', 'db4_reb', 'db4_cust'], signal_time, decomposition_levels=decomposition_levels)
 
         case 'dwt':
-            dwt_plotting('db4', signal_time, decomposition_levels=6)
+            dwt_plotting('db4', signal_time, decomposition_levels=decomposition_levels)
 
         case 'stats':
             statistical_analysis(signal_time)

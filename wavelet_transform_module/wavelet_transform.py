@@ -18,10 +18,10 @@ def get_wavelet(wavelet_name: str) -> pywt.Wavelet:
         for i, filter_value in enumerate(basic_filters[filter_to_change]):
             custom_filters[filter_to_change][i] = filter_value * 1.1
 
-        print(
-            basic_filters[filter_to_change][0], custom_filters[filter_to_change][0],
-            basic_filters[filter_to_change][0] == custom_filters[filter_to_change][0]
-        )
+        # print(
+        #     basic_filters[filter_to_change][0], custom_filters[filter_to_change][0],
+        #     basic_filters[filter_to_change][0] == custom_filters[filter_to_change][0]
+        # )
 
         wavelet_custom_filters = pywt.Wavelet(
             wavelet_name,
@@ -59,8 +59,11 @@ def discrete_wavelet_transform(signal: NDArray, wavelet_name: str, level: int | 
 
     wavelet = get_wavelet(wavelet_name)
 
-    if level == 2:
-        cA, cD = pywt.dwt(signal, wavelet, level)
+    if level is None:
+        print(len(signal))
+        cA, cD = pywt.dwt(signal, wavelet)
+        print(len(cA))
+        print()
         return cA, [cD]
     else:
         coeffs = pywt.wavedec(signal, wavelet, level=level)
