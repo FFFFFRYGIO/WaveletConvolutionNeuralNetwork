@@ -98,7 +98,7 @@ def statistical_analysis(signal_time: int):
 def main():
     """Get signals, create wavelet transforms, plot results."""
 
-    analysis_mode = 'inverse_dwt'
+    analysis_mode = 'dwt'
     signal_time = 30
     decomposition_levels = None
 
