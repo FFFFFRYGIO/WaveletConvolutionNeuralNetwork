@@ -2,17 +2,22 @@
 import numpy as np
 from numpy.typing import NDArray
 from pywt import Wavelet, dwt, wavedec
+from scipy.signal import medfilt
 
 
 class ECGSignalContent:
     """Class that stored ECG signal content with specified wavelet and implements methods to manipulate its data."""
 
-    def __init__(self, signal: NDArray, tag: str, fs: int, wavelet: str | Wavelet, normalize_signal=True) -> None:
+    def __init__(self, signal: NDArray, tag: str, fs: int, wavelet: str | Wavelet,
+                 normalize_signal: bool = True, denoise_signal: bool = False) -> None:
         self.signal = signal
-        if normalize_signal:
-            self.normalize_signal_max_abs()
         self.tag = tag
         self.fs = fs
+
+        if denoise_signal:
+            self.denoise_signal()
+        if normalize_signal:
+            self.normalize_signal_max_abs()
 
         if isinstance(wavelet, str):
             self.wavelet = Wavelet(wavelet)
@@ -30,6 +35,12 @@ class ECGSignalContent:
         max_peak = np.max(np.abs(self.signal))
         if max_peak:
             self.signal = self.signal / max_peak
+
+    def denoise_signal(self) -> None:
+        """Remove ECG baseline wander."""
+        kernel_size = int(1.0 * self.fs) | 1
+        baseline = medfilt(self.signal, kernel_size=kernel_size)
+        self.signal = self.signal - baseline
 
     def run_dwt(self, decomposition_levels: int = 2) -> None:
         """Run DWT for specified decomposition levels."""
