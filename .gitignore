@@ -4,6 +4,8 @@
 # Unused old analysis that might be useful later
 old_temporal_analysis/
 
+# Environment variables file
+.env
 
 # IGNORE DOWNLOADED ECG DATA
 
