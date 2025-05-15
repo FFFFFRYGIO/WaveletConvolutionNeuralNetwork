@@ -9,7 +9,7 @@ from official_scripts.dwt_analysis.experiments_plotter import DWTExperimentsPlot
 def main():
     """Run DWT and IDWT experiments."""
     seconds = 5
-    signal_amounts = {'ARR': 1, 'CHF': 1, 'NSR': 1}
+    signal_amounts = {'ARR': 0, 'CHF': 0, 'NSR': 1}
     normalize_denoise_combinations = [[False, False], [True, False], [True, True], [False, True]]
     wavelets = ['db4']
     decomposition_levels = 6
