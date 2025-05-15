@@ -46,7 +46,7 @@ def get_example_ecg_signal(seconds: int | None = None) -> tuple[NDArray, str, in
 
 
 def main():
-    """Get signal, detect its samples values distribution, finally display the results."""
+    """Get signal baseline and remove baseline wander from ECG signal."""
 
     signal_time_seconds = 5
     ecg_signal, tag, fs = get_example_ecg_signal(seconds=signal_time_seconds)
