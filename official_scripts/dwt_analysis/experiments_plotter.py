@@ -39,9 +39,15 @@ class DWTExperimentsPlotter:
 
         for signal_content_number, signal_content in enumerate(self.signals_contents):
             signal = signal_content.signal
-            signal_tag = signal_content.tag
             duration = len(signal) / self.fs
-            self.plot_ecg_signal(signal_content_number, signal, signal_tag, duration)
+
+            time_signal = np.linspace(0, duration, num=len(signal))
+            signal_plot = cast(Axes, self.axs[0, signal_content_number])
+            signal_plot.plot(time_signal, signal)
+            signal_plot.set_title(f"S: {signal_content.tag} {signal_content.preparation_mode} (len={len(signal)})")
+            signal_plot.set_xlabel("Time [s]")
+            signal_plot.set_ylabel("Amplitude [mV]")
+            signal_plot.grid(True)
 
             for dwt_decom_number, (coeff_name, coeff) in enumerate(signal_content.dwt_decomposition.items()):
                 time_coeff = np.linspace(0, duration, num=len(coeff))
@@ -60,16 +66,6 @@ class DWTExperimentsPlotter:
                 inverse_dwt_plot.set_xlabel("Time [s]")
                 inverse_dwt_plot.set_xlim(0, duration)
                 inverse_dwt_plot.grid(True)
-
-    def plot_ecg_signal(self, signal_content_number: int, signal: NDArray, tag: str, duration: float) -> None:
-        """Plot ecg signal with qrs_peaks."""
-        time_signal = np.linspace(0, duration, num=len(signal))
-        signal_plot = self.axs[0, signal_content_number]
-        signal_plot.plot(time_signal, signal)
-        signal_plot.set_title(f"ECG: {tag} with QRS (len={len(signal)})")
-        signal_plot.set_xlabel("Time [s]")
-        signal_plot.set_ylabel("Amplitude [mV]")
-        signal_plot.grid(True)
 
     @staticmethod
     def display_plots(maximized: bool = True):
