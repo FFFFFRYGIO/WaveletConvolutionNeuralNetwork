@@ -4,9 +4,12 @@ import os
 from numpy.typing import NDArray
 from scipy.io import loadmat
 
+from ecg_signal import ECGSignalContent
+from experiments_plotter import DWTExperimentsPlotter
+
 
 def get_signals_list(signal_time: int, amounts: dict[str, int] = None) -> tuple[list[tuple[NDArray, str]], int]:
-    """Get a list of signals specified in the main."""
+    """Get a list of signals specified in the main script."""
 
     data_source = os.getenv('DATA_SOURCE')
     mat_data = loadmat(data_source)
@@ -31,3 +34,31 @@ def get_signals_list(signal_time: int, amounts: dict[str, int] = None) -> tuple[
             signals.append((signal, signal_class))
 
     return signals, frequency
+
+
+def run_signals_analysis(
+        signals_data: list[tuple[NDArray, str]],
+        frequency: int,
+        wavelets_list: list[str],
+        decomposition_levels: int,
+        normalize_denoise_combinations: list[tuple[bool, bool]] | None = None,
+        reconstruction_combinations_set: list[list[str]] | None = None
+) -> None:
+    """Run ecg signals analysis for configuration specified in the main script."""
+
+    if reconstruction_combinations_set is None:
+        reconstruction_combinations_set = []
+    signals_contents_objects_list: list[ECGSignalContent] = []
+
+    for wavelet in wavelets_list:
+        for signal, tag in signals_data:
+            for normalize, denoise in normalize_denoise_combinations:
+                signal_object = ECGSignalContent(signal, tag, frequency, wavelet, normalize, denoise)
+                signal_object.run_dwt(decomposition_levels)
+                signal_object.set_reconstruction_combinations(combinations=reconstruction_combinations_set)
+                signal_object.run_idwt()
+                signals_contents_objects_list.append(signal_object)
+
+    plotter = DWTExperimentsPlotter(signals_contents_objects_list, frequency)
+    plotter.compute_plotting()
+    plotter.display_plots(maximized=False)
