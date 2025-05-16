@@ -1,7 +1,7 @@
 """Implementation of class for ecg signal computation."""
 import numpy as np
 from numpy.typing import NDArray
-from pywt import Wavelet, dwt, wavedec
+from pywt import Wavelet, dwt, wavedec, waverec
 from scipy.signal import medfilt
 
 
@@ -74,13 +74,11 @@ class ECGSignalContent:
         if not len(self.reconstruction_combinations):
             raise ValueError("No reconstruction combinations set.")
         for reconstruction_combination in self.reconstruction_combinations:
-            decomposition_elements = [self.dwt_decomposition[element] for element in reconstruction_combination]
-            self.dwt_reconstructions.append((reconstruction_combination, decomposition_elements))
-
-    def get_signal_content(self) -> dict[str, tuple[str, NDArray] | list[tuple[str, NDArray]]]:
-        """Get ECG signal content to display as plots."""
-        content_dict: dict[str, tuple[str, NDArray] | list[tuple[str, NDArray]]] = {}
-        content_dict['signal'] = (self.tag, self.signal)
-        content_dict['dwt'] = [(level, decomposition) for level, decomposition in self.dwt_decomposition.items()]
-        content_dict['idwt'] = self.dwt_reconstructions
-        return content_dict
+            included_coeffs = []
+            for level_name, coeff in list(self.dwt_decomposition.items()):
+                if level_name in reconstruction_combination:
+                    included_coeffs.append(self.dwt_decomposition[level_name])
+                else:
+                    included_coeffs.append(np.zeros_like(self.dwt_decomposition[level_name]))
+            reconstruction = waverec(included_coeffs, self.wavelet)
+            self.dwt_reconstructions.append((reconstruction_combination, reconstruction))
