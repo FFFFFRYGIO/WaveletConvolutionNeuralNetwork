@@ -9,8 +9,8 @@ def main():
     signals_data, frequency = get_signals_list(seconds, signal_amounts)
 
     wavelets_list = ['db4', 'sym4']
-    decomposition_levels = 3
-    normalize_denoise_combinations = [(True, False)]
+    decomposition_levels = 6
+    normalize_denoise_combinations = [(True, False), (True, True)]
     reconstruction_combinations_set: list[list[str]] = []
 
     run_signals_analysis(
