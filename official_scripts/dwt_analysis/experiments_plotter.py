@@ -15,18 +15,21 @@ class DWTExperimentsPlotter:
     def __init__(self, signals_contents: list[ECGSignalContent], signals_frequency: int) -> None:
         matplotlib.use("TkAgg")
         self.signals_contents = signals_contents
+        self.signals_length = len(self.signals_contents)
         self.fs: int = signals_frequency
-        self.larges_dwt = max([len(signals_content.dwt_decomposition) for signals_content in signals_contents])
-        self.larges_idwt = max([len(signals_content.dwt_reconstructions) for signals_content in signals_contents])
+        self.largest_dwt = max([len(signals_content.dwt_decomposition) for signals_content in signals_contents])
+        self.largest_idwt = max([len(signals_content.dwt_reconstructions) for signals_content in signals_contents])
+        self.axs_rows = 1 + self.largest_dwt + self.largest_idwt
+        self.axs_cols = self.signals_length
         self.fig, self.axs = None, None
 
     def compute_plotting(self):
         """Plot signal with his specific analysis."""
 
         self.fig, self.axs = plt.subplots(
-            nrows=1 + self.larges_dwt + self.larges_idwt,
-            ncols=len(self.signals_contents),
-            figsize=(3 * len(self.signals_contents), 2 * (1 + 1 + self.larges_dwt + self.larges_idwt)),
+            nrows=self.axs_rows,
+            ncols=self.axs_cols,
+            figsize=(3 * self.axs_cols, 1.5 * self.axs_rows),
             squeeze=False,
             sharex=True, sharey='row',
         )
