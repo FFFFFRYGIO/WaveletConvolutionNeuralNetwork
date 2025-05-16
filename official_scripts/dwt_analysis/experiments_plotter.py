@@ -75,7 +75,6 @@ class DWTExperimentsPlotter:
     def display_plots(maximized: bool = True):
         """Display all signals computed signals."""
         plt.tight_layout()
-
         if maximized:
             mgr = plt.get_current_fig_manager()
             win = getattr(mgr, "window", None)
