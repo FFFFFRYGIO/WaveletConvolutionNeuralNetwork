@@ -9,7 +9,7 @@ class ECGSignalContent:
     """Class that stored ECG signal content with specified wavelet and implements methods to manipulate its data."""
 
     def __init__(self, signal: NDArray, tag: str, fs: int, wavelet: str | Wavelet,
-                 normalize_signal: bool = True, denoise_signal: bool = False) -> None:
+                 normalize_signal: bool, denoise_signal: bool) -> None:
         self.signal = signal
         self.tag = tag
         self.fs = fs
