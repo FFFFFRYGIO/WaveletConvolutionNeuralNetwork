@@ -74,7 +74,7 @@ def discrete_wavelet_transform(signal: NDArray, wavelet_name: str, level: int | 
 
 def inverse_discrete_wavelet_transform(
         cA: NDArray, cDs: list[NDArray], wavelet_name, levels_for_inversion: list[str] | None = None
-):
+) -> NDArray:
     """Run inverse DWT."""
 
     wavelet = get_wavelet(wavelet_name)
