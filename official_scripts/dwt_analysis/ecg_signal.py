@@ -57,7 +57,7 @@ class ECGSignalContent:
                 self.dwt_decomposition[f'D{decomposition_levels - i}'] = cD
 
     def set_reconstruction_combinations(
-            self, combinations: list[list[str]], add_first_two=True, add_last_two=True, add_full_reconstruction=False
+            self, combinations: list[list[str]] | None = None, add_first_two=True, add_last_two=True, add_full_reconstruction=False
     ) -> None:
         """Add IDWT reconstruction combinations for calculations."""
         if len(combinations):
