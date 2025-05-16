@@ -8,7 +8,7 @@ from scipy.io import loadmat
 def get_signals_list(signal_time: int, amounts: dict[str, int] = None) -> tuple[list[tuple[NDArray, str]], int]:
     """Get a list of signals specified in the main."""
 
-    data_source = os.getenv('ECGDATA_SOURCE')
+    data_source = os.getenv('DATA_SOURCE')
     mat_data = loadmat(data_source)
     raw_data = mat_data['ECGData']
     source_signals, labels = raw_data[0, 0]
