@@ -14,17 +14,23 @@ class ECGSignalContent:
         self.tag = tag
         self.fs = fs
 
-        if denoise_signal:
-            self.denoise_signal()
-        if normalize_signal:
-            self.normalize_signal_max_abs()
-
         if isinstance(wavelet, str):
             self.wavelet = Wavelet(wavelet)
         elif isinstance(wavelet, Wavelet):
             self.wavelet = wavelet
         else:
             raise TypeError('Wavelet must be str or pywt.Wavelet')
+
+        self.preparation_mode = ''
+
+        if denoise_signal:
+            self.denoise_signal()
+            self.preparation_mode += 'Den'
+        if normalize_signal:
+            self.normalize_signal_max_abs()
+            self.preparation_mode += 'Nor'
+
+        self.preparation_mode = self.preparation_mode if self.preparation_mode else 'Raw'
 
         self.dwt_decomposition: dict[str, NDArray] = {}
         self.reconstruction_combinations: list[list[str] | str] = []
