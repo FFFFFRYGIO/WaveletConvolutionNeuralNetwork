@@ -1,7 +1,10 @@
 """Class that plots all signals analysis content for comparison."""
+from typing import cast
+
 import matplotlib
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
 from numpy.typing import NDArray
 
 from official_scripts.dwt_analysis.ecg_signal import ECGSignalContent
@@ -35,15 +38,35 @@ class DWTExperimentsPlotter:
         )
 
         for signal_content_number, signal_content in enumerate(self.signals_contents):
-            tag, signal = signal_content['signal']
-            time_signal = np.linspace(0, len(signal) / self.fs, num=len(signal))
-            self.plot_ecg_signal(signal_content_number, signal, tag, time_signal)
+            signal = signal_content.signal
+            signal_tag = signal_content.tag
+            duration = len(signal) / self.fs
+            self.plot_ecg_signal(signal_content_number, signal, signal_tag, duration)
 
-    def plot_ecg_signal(self, signal_content_number: int, signal: NDArray, tag: str, time_signal: NDArray) -> None:
+            for dwt_decom_number, (coeff_name, coeff) in enumerate(signal_content.dwt_decomposition.items()):
+                time_coeff = np.linspace(0, duration, num=len(coeff))
+                dwt_plot = cast(Axes, self.axs[dwt_decom_number + 1, signal_content_number])
+                dwt_plot.plot(time_coeff, coeff)
+                dwt_plot.set_title(f"Level {coeff_name} (len={len(coeff)})")
+                dwt_plot.set_xlabel("Time [s]")
+                dwt_plot.set_xlim(0, duration)
+                dwt_plot.grid(True)
+
+            for inverse_dwt_number, (coeffs_names, inverse_dwt) in enumerate(signal_content.dwt_reconstructions):
+                time_inverse_dwt = np.linspace(0, duration, num=len(inverse_dwt))
+                inverse_dwt_plot = cast(Axes, self.axs[inverse_dwt_number + self.largest_dwt + 1, signal_content_number])
+                inverse_dwt_plot.plot(time_inverse_dwt, inverse_dwt)
+                inverse_dwt_plot.set_title(f"IDWT {coeffs_names} (len={len(inverse_dwt)})")
+                inverse_dwt_plot.set_xlabel("Time [s]")
+                inverse_dwt_plot.set_xlim(0, duration)
+                inverse_dwt_plot.grid(True)
+
+    def plot_ecg_signal(self, signal_content_number: int, signal: NDArray, tag: str, duration: float) -> None:
         """Plot ecg signal with qrs_peaks."""
+        time_signal = np.linspace(0, duration, num=len(signal))
         signal_plot = self.axs[0, signal_content_number]
         signal_plot.plot(time_signal, signal)
-        signal_plot.set_title(f"ECG: {tag} with QRS (l={len(signal)})")
+        signal_plot.set_title(f"ECG: {tag} with QRS (len={len(signal)})")
         signal_plot.set_xlabel("Time [s]")
         signal_plot.set_ylabel("Amplitude [mV]")
         signal_plot.grid(True)
