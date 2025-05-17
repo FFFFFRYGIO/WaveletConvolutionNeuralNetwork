@@ -44,7 +44,7 @@ def run_signals_analysis(
         wavelets_list: list[str],
         decomposition_levels: int,
         normalize_denoise_combinations: list[tuple[bool, bool]] | None = None,
-        reconstruction_combinations_set: list[list[str]] | None = None
+        reconstruction_combinations_set: list[str | list[str]] | None = None
 ) -> None:
     """Run ecg signals analysis for configuration specified in the main script."""
 
