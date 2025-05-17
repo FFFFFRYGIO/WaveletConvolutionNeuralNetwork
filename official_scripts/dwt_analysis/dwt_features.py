@@ -42,7 +42,7 @@ def run_signals_analysis(
         signals_data: list[tuple[NDArray, str]],
         frequency: int,
         wavelets_list: list[str],
-        decomposition_levels: int,
+        decomposition_levels: list[int],
         normalize_denoise_combinations: list[tuple[bool, bool]] | None = None,
         reconstruction_combinations_set: list[str | list[str]] | None = None
 ) -> None:
@@ -53,13 +53,14 @@ def run_signals_analysis(
     signals_contents_objects_list: list[ECGSignalContent] = []
 
     for wavelet in wavelets_list:
-        for signal, tag in signals_data:
-            for normalize, denoise in normalize_denoise_combinations:
-                signal_object = ECGSignalContent(signal, tag, frequency, wavelet, normalize, denoise)
-                signal_object.run_dwt(decomposition_levels)
-                signal_object.set_reconstruction_combinations(combinations=reconstruction_combinations_set)
-                signal_object.run_idwt()
-                signals_contents_objects_list.append(signal_object)
+        for decomposition_level in decomposition_levels:
+            for signal, tag in signals_data:
+                for normalize, denoise in normalize_denoise_combinations:
+                    signal_object = ECGSignalContent(signal, tag, frequency, wavelet, normalize, denoise)
+                    signal_object.run_dwt(decomposition_level)
+                    signal_object.set_reconstruction_combinations(combinations=reconstruction_combinations_set)
+                    signal_object.run_idwt()
+                    signals_contents_objects_list.append(signal_object)
 
     plotter = DWTExperimentsPlotter(signals_contents_objects_list, frequency)
     plotter.compute_plotting()
