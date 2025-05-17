@@ -50,8 +50,8 @@ class ECGSignalContent:
 
     def run_dwt(self, decomposition_levels: int = 2) -> None:
         """Run DWT for specified decomposition levels."""
-        if decomposition_levels == 2:
-            cA, cD = dwt(self.signal, self.wavelet, 2)
+        if decomposition_levels == 1:
+            cA, cD = dwt(self.signal, self.wavelet)
             self.dwt_decomposition['A'] = cA
             self.dwt_decomposition['D1'] = cD
         else:
