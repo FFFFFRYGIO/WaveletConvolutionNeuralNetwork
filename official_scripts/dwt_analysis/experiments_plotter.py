@@ -5,7 +5,6 @@ import matplotlib
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
-from numpy.typing import NDArray
 
 from official_scripts.dwt_analysis.ecg_signal import ECGSignalContent
 
@@ -37,30 +36,31 @@ class DWTExperimentsPlotter:
             sharex=True, sharey='row',
         )
 
-        for signal_content_number, signal_content in enumerate(self.signals_contents):
-            signal = signal_content.signal
+        for sig_content_number, sig_content in enumerate(self.signals_contents):
+            signal = sig_content.signal
             duration = len(signal) / self.fs
 
             time_signal = np.linspace(0, duration, num=len(signal))
-            signal_plot = cast(Axes, self.axs[0, signal_content_number])
-            signal_plot.plot(time_signal, signal)
-            signal_plot.set_title(f"S: {signal_content.tag} {signal_content.preparation_mode} (len={len(signal)})")
-            signal_plot.set_xlabel("Time [s]")
-            signal_plot.set_ylabel("Amplitude [mV]")
-            signal_plot.grid(True)
+            sig_plot = cast(Axes, self.axs[0, sig_content_number])
+            sig_plot.plot(time_signal, signal)
+            sig_title = f"S: {sig_content.tag} {sig_content.mode}, {sig_content.wavelet.name} (len={len(signal)})"
+            sig_plot.set_title(sig_title)
+            sig_plot.set_xlabel("Time [s]")
+            sig_plot.set_ylabel("Amplitude [mV]")
+            sig_plot.grid(True)
 
-            for dwt_decom_number, (coeff_name, coeff) in enumerate(signal_content.dwt_decomposition.items()):
+            for coeff_number, (coeff_name, coeff) in enumerate(sig_content.dwt_decomposition.items()):
                 time_coeff = np.linspace(0, duration, num=len(coeff))
-                dwt_plot = cast(Axes, self.axs[dwt_decom_number + 1, signal_content_number])
+                dwt_plot = cast(Axes, self.axs[coeff_number + 1, sig_content_number])
                 dwt_plot.plot(time_coeff, coeff)
                 dwt_plot.set_title(f"Level {coeff_name} (len={len(coeff)})")
                 dwt_plot.set_xlabel("Time [s]")
                 dwt_plot.set_xlim(0, duration)
                 dwt_plot.grid(True)
 
-            for inverse_dwt_number, (coeffs_names, inverse_dwt) in enumerate(signal_content.dwt_reconstructions):
+            for idwt_number, (coeffs_names, inverse_dwt) in enumerate(sig_content.dwt_reconstructions):
                 time_inverse_dwt = np.linspace(0, duration, num=len(inverse_dwt))
-                inverse_dwt_plot = cast(Axes, self.axs[inverse_dwt_number + self.largest_dwt + 1, signal_content_number])
+                inverse_dwt_plot = cast(Axes, self.axs[idwt_number + self.largest_dwt + 1, sig_content_number])
                 inverse_dwt_plot.plot(time_inverse_dwt, inverse_dwt)
                 inverse_dwt_plot.set_title(f"IDWT {coeffs_names} (len={len(inverse_dwt)})")
                 inverse_dwt_plot.set_xlabel("Time [s]")

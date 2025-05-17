@@ -21,16 +21,16 @@ class ECGSignalContent:
         else:
             raise TypeError('Wavelet must be str or pywt.Wavelet')
 
-        self.preparation_mode = ''
+        self.mode = ''
 
         if denoise_signal:
             self.denoise_signal()
-            self.preparation_mode += 'Den'
+            self.mode += 'Den'
         if normalize_signal:
             self.normalize_signal_max_abs()
-            self.preparation_mode += 'Nor'
+            self.mode += 'Nor'
 
-        self.preparation_mode = self.preparation_mode if self.preparation_mode else 'Raw'
+        self.mode = self.mode if self.mode else 'Raw'
 
         self.dwt_decomposition: dict[str, NDArray] = {}
         self.reconstruction_combinations: list[list[str] | str] = []
