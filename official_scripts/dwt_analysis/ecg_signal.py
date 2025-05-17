@@ -63,17 +63,22 @@ class ECGSignalContent:
                 self.dwt_decomposition[f'D{decomposition_levels - i}'] = cD
 
     def set_reconstruction_combinations(
-            self, combinations: list[list[str]] | None = None, add_first_two=True, add_last_two=True, add_full_reconstruction=False
+            self, combinations: list[list[str]] | None = None
     ) -> None:
         """Add IDWT reconstruction combinations for calculations."""
-        if len(combinations):
-            self.reconstruction_combinations.extend(combinations)
-        if add_first_two:
-            self.reconstruction_combinations.append(['D1', 'D2'])
-        if add_last_two:
-            self.reconstruction_combinations.append(['A', f'D{len(self.dwt_decomposition) - 1}'])
-        if add_full_reconstruction:
-            self.reconstruction_combinations.append('full_reconstruction')
+        for combination in combinations:
+            match combination:
+                case 'first_two':
+                    self.reconstruction_combinations.append(list(self.dwt_decomposition.keys())[:2])
+                case 'last_two':
+                    self.reconstruction_combinations.append(list(self.dwt_decomposition.keys())[-2:])
+                case 'all':
+                    self.reconstruction_combinations.append(list(self.dwt_decomposition.keys()))
+                case _:
+                    if isinstance(combination, list):
+                        self.reconstruction_combinations.append(combination)
+                    else:
+                        raise ValueError(f'Bad combination given: {combination}')
 
     def run_idwt(self) -> None:
         """Run IDWT for specified reconstruction combinations."""
