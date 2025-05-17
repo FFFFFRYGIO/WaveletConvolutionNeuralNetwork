@@ -8,7 +8,7 @@ from ecg_signal import ECGSignalContent
 from experiments_plotter import DWTExperimentsPlotter
 
 
-def get_signals_list(signal_time: int, amounts: dict[str, int] = None) -> tuple[list[tuple[NDArray, str]], int]:
+def get_signals_list(signal_time: int | None = None, amounts: dict[str, int] = None) -> tuple[list[tuple[NDArray, str]], int]:
     """Get a list of signals specified in the main script."""
 
     data_source = os.getenv('DATA_SOURCE')
@@ -23,7 +23,9 @@ def get_signals_list(signal_time: int, amounts: dict[str, int] = None) -> tuple[
 
     # Get signal frequency based on documentation
     frequency = int(os.getenv('ECGDATA_FREQUENCY'))
-    duration_samples = int(signal_time * frequency)
+    duration_samples = len(source_signals[0])
+    if signal_time is not None:
+        duration_samples = int(signal_time * frequency)
 
     signals: list[tuple[NDArray, str]] = []
 
