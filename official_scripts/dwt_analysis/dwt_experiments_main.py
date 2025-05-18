@@ -10,12 +10,12 @@ def main():
 
     wavelets_list: list[str] = []
     decomposition_levels: list[int] = []
-    normalize_denoise_combinations: list[tuple[bool, bool]] = []
     reconstruction_combinations_set: list[str | list[str]] = []
+    denoise_combinations: set[bool] = {False}
 
     run_signals_analysis(
         signals_data, frequency, wavelets_list, decomposition_levels,
-        normalize_denoise_combinations, reconstruction_combinations_set,
+        denoise_combinations, reconstruction_combinations_set,
     )
 
 

@@ -45,7 +45,7 @@ def run_signals_analysis(
         frequency: int,
         wavelets_list: list[str],
         decomposition_levels: list[int],
-        normalize_denoise_combinations: list[tuple[bool, bool]] | None = None,
+        denoise_combinations: set[bool],
         reconstruction_combinations_set: list[str | list[str]] | None = None
 ) -> None:
     """Run ecg signals analysis for configuration specified in the main script."""
@@ -57,8 +57,8 @@ def run_signals_analysis(
     for wavelet in wavelets_list:
         for decomposition_level in decomposition_levels:
             for signal, tag in signals_data:
-                for normalize, denoise in normalize_denoise_combinations:
-                    signal_object = ECGSignalContent(signal, tag, frequency, wavelet, normalize, denoise)
+                for if_denoise in denoise_combinations:
+                    signal_object = ECGSignalContent(signal, tag, frequency, wavelet, if_denoise)
                     signal_object.run_dwt(decomposition_level)
                     signal_object.set_reconstruction_combinations(combinations=reconstruction_combinations_set)
                     signal_object.run_idwt()
