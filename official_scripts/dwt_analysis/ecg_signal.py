@@ -70,6 +70,8 @@ class ECGSignalContent:
             match combination:
                 case 'first_two':
                     self.reconstruction_combinations.append(list(self.dwt_decomposition.keys())[:2])
+                case 'second_two':
+                    self.reconstruction_combinations.append(list(self.dwt_decomposition.keys())[2:4])
                 case 'last_two':
                     self.reconstruction_combinations.append(list(self.dwt_decomposition.keys())[-2:])
                 case 'all':
