@@ -4,14 +4,14 @@ from dwt_features import get_signals_list, run_signals_analysis
 
 def main():
     """Run DWT and IDWT experiments."""
-    seconds = 5
-    signal_amounts = {'ARR': 1, 'CHF': 1, 'NSR': 1}
+    seconds: int | None = None
+    signal_amounts: dict[str, int] = {'ARR': 0, 'CHF': 0, 'NSR': 0}
     signals_data, frequency = get_signals_list(seconds, signal_amounts)
 
-    wavelets_list = ['db4', 'sym4']
-    normalize_denoise_combinations = [(True, False), (True, True)]
-    decomposition_levels = [2, 4, 6]
-    reconstruction_combinations_set: list[str | list[str]] = ['first_two', 'last_two', 'all']
+    wavelets_list: list[str] = []
+    decomposition_levels: list[int] = []
+    normalize_denoise_combinations: list[tuple[bool, bool]] = []
+    reconstruction_combinations_set: list[str | list[str]] = []
 
     run_signals_analysis(
         signals_data, frequency, wavelets_list, decomposition_levels,
