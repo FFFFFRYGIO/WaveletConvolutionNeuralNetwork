@@ -116,4 +116,44 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+
+    import pywt
+    from copy import deepcopy
+
+    print()
+
+    wavelet = pywt.Wavelet('db4')
+    orig_filter = wavelet.dec_lo
+    print(f'{orig_filter=}')
+    orig_filter_bank = wavelet.filter_bank
+    print(f'{orig_filter_bank=}')
+    initial_filter = deepcopy(wavelet.dec_lo)
+    print(f'{initial_filter=}')
+    print()
+
+    params = initial_filter
+    print(f'{params=}')
+    new_params = [p * (1 + i / 1000) for i, p in enumerate(params)]
+    print(f'{new_params=}')
+    print()
+
+    filter_back = new_params
+    print(f'{orig_filter=}')
+    print(f'{filter_back=}')
+    print()
+
+    filter_bank1 = pywt.orthogonal_filter_bank(orig_filter)
+    filter_bank2 = pywt.orthogonal_filter_bank(filter_back)
+    print(f'{filter_bank1=}')
+    print(f'{filter_bank2=}')
+    print()
+
+    wavelet1 = pywt.Wavelet('cust1', filter_bank=filter_bank1)
+    wavelet2 = pywt.Wavelet('cust2', filter_bank=filter_bank2)
+    print(f'{wavelet1.dec_lo=}')
+    print(f'{wavelet2.dec_lo=}')
+    print()
+
+    for wf1, wf2 in zip(wavelet1.dec_lo, wavelet2.dec_lo):
+        print(f'{wf1 == wf2}\t{wf1=}\t{wf2=}\t{wf1 - wf2}')
