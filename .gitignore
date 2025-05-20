@@ -7,6 +7,9 @@ old_temporal_analysis/
 # Environment variables file
 .env
 
+# pytorch wavelets module
+/pytorch_wavelets_testing/pytorch_wavelets/
+
 # IGNORE DOWNLOADED ECG DATA
 
 # Ignore ECGData downloaded from https://github.com/mathworks/physionet_ECG_data/blob/main/ECGData.zip
