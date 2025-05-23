@@ -124,11 +124,11 @@ if __name__ == '__main__':
     print()
 
     wavelet = pywt.Wavelet('db4')
-    orig_filter = wavelet.dec_lo
+    orig_filter = wavelet.rec_lo
     print(f'{orig_filter=}')
     orig_filter_bank = wavelet.filter_bank
     print(f'{orig_filter_bank=}')
-    initial_filter = deepcopy(wavelet.dec_lo)
+    initial_filter = deepcopy(wavelet.rec_lo)
     print(f'{initial_filter=}')
     print()
 
@@ -150,10 +150,28 @@ if __name__ == '__main__':
     print()
 
     wavelet1 = pywt.Wavelet('cust1', filter_bank=filter_bank1)
+    wavelet1.orthogonal = True
+    wavelet1.biorthogonal = True
     wavelet2 = pywt.Wavelet('cust2', filter_bank=filter_bank2)
-    print(f'{wavelet1.dec_lo=}')
-    print(f'{wavelet2.dec_lo=}')
+    wavelet2.orthogonal = True
+    wavelet2.biorthogonal = True
+    print(f'{wavelet1.rec_lo=}')
+    print(f'{wavelet2.rec_lo=}')
     print()
 
-    for wf1, wf2 in zip(wavelet1.dec_lo, wavelet2.dec_lo):
-        print(f'{wf1 == wf2}\t{wf1=}\t{wf2=}\t{wf1 - wf2}')
+    import pandas as pd
+
+    # build a list of dicts
+    rows = []
+    for wf, wf1, wf2 in zip(wavelet.dec_lo, wavelet1.dec_lo, wavelet2.dec_lo):
+        rows.append({
+            "wf": wf,
+            "wf1": wf1,
+            "wf2": wf2,
+            "Diff1": wf - wf1,
+            "Diff2": wf - wf2,
+        })
+
+    # make DataFrame and print
+    df = pd.DataFrame(rows)
+    print(df.to_string(index=False))
