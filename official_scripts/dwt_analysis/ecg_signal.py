@@ -1,7 +1,7 @@
 """Implementation of class for ecg signal computation."""
 import numpy as np
 from numpy.typing import NDArray
-from pywt import Wavelet, dwt, wavedec, waverec
+from pywt import Wavelet, dwt, wavedec, waverec, dwt_max_level
 from scipy.signal import medfilt
 
 
