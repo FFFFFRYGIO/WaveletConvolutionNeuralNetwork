@@ -48,13 +48,15 @@ class ECGSignalContent:
         baseline = medfilt(self.signal, kernel_size=kernel_size)
         self.signal = self.signal - baseline
 
-    def run_dwt(self, decomposition_levels: int = 2) -> None:
+    def run_dwt(self, decomposition_levels: int | None = None) -> None:
         """Run DWT for specified decomposition levels."""
         if decomposition_levels == 1:
             cA, cD = dwt(self.signal, self.wavelet)
             self.dwt_decomposition['A'] = cA
             self.dwt_decomposition['D1'] = cD
         else:
+            if decomposition_levels is None:
+                decomposition_levels = dwt_max_level(len(self.signal), self.wavelet.dec_len)
             coeffs = wavedec(self.signal, self.wavelet, level=decomposition_levels)
             cA_n = coeffs[0]
             cDs = coeffs[1:]
