@@ -11,7 +11,7 @@ import scipy
 import torch
 from scipy.signal import medfilt
 from torch import nn
-from torch.utils.data import TensorDataset
+from torch.utils.data import TensorDataset, DataLoader
 
 logging.basicConfig(
     level=logging.INFO,
@@ -280,4 +280,15 @@ def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = 
 
 
 if __name__ == '__main__':
-    prepare_data(replace_tensors_files=True, signal_time=1)
+    training_data_file, validation_data_file = prepare_data(signal_time=1)
+
+    loaded_train_data, loaded_train_labels = torch.load(training_data_file)
+    loaded_val_data, loaded_val_labels = torch.load(validation_data_file)
+
+    train_ds = TensorDataset(loaded_train_data, loaded_train_labels)
+    val_ds = TensorDataset(loaded_val_data, loaded_val_labels)
+
+    batch_size = int(os.getenv('BATCH_SIZE'))
+
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=True)
