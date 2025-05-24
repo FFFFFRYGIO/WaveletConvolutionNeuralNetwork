@@ -27,7 +27,7 @@ def download_dataset() -> tuple[str, str]:
 
     download_url = os.getenv('DATA_SOURCE_URL')
     mat_file = download_url.split('/')[-1].split('.')[0]
-    zip_path, mat_path = f'{mat_file}.zip', f'{mat_file}.mat'
+    zip_path, mat_path = rf'data/{mat_file}.zip', rf'data/{mat_file}.mat'
 
     if not os.path.exists(zip_path):
         logger.info('Downloading {zip_path}.'.format(zip_path=zip_path))
@@ -39,7 +39,7 @@ def download_dataset() -> tuple[str, str]:
     if not os.path.exists(mat_path):
         logger.info('Extracting {zip_path}.'.format(zip_path=zip_path))
         with zipfile.ZipFile(zip_path) as z:
-            z.extractall()
+            z.extractall(path='data')
         logger.info('Extraction complete.')
     else:
         logger.info('{mat_path} already exists, skipping download.'.format(mat_path=mat_path))

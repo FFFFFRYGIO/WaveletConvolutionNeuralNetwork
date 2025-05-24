@@ -9,6 +9,9 @@
 
 # IGNORE DOWNLOADED ECG DATA
 
+# Ignore ECGData for PyTorch tensors
+wavelet_neural_network/official_scripts/data
+
 # Ignore ECGData downloaded from https://github.com/mathworks/physionet_ECG_data/blob/main/ECGData.zip
 data_analysis/data_getter/from_github/ECGData
 
