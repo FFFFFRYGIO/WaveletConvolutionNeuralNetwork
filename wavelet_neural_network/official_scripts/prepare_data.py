@@ -175,11 +175,15 @@ def create_train_and_validation_subsets(
 
     train_pairs = list(zip(train_signals, train_labels))
     random.shuffle(train_pairs)
-    train_shuffled_signals, train_shuffled_labels = map(list, zip(*train_pairs))
+    train_shuffled_signals, train_shuffled_labels = zip(*train_pairs)
+    train_shuffled_signals = list(train_shuffled_signals)
+    train_shuffled_labels = list(train_shuffled_labels)
 
     validation_pairs = list(zip(validation_signals, validation_labels))
     random.shuffle(validation_pairs)
-    validation_shuffled_signals, validation_shuffled_labels = map(list, zip(*validation_pairs))
+    validation_shuffled_signals, validation_shuffled_labels = zip(*validation_pairs)
+    validation_shuffled_signals = list(validation_shuffled_signals)
+    validation_shuffled_labels = list(validation_shuffled_labels)
 
     assert len(train_shuffled_signals) == len(train_labels)
     assert len(validation_shuffled_signals) == len(validation_labels)
