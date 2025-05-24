@@ -198,4 +198,4 @@ train_tensors = train_ds.tensors       # typically a tuple like (data_tensor, ta
 val_tensors   = val_ds.tensors
 
 torch.save(train_tensors, "train_tensors.pt")
-torch.save(val_tensors,   "val_tensors.pt")
+torch.save(val_tensors, "val_tensors.pt")

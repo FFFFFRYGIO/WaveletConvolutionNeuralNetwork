@@ -5,7 +5,7 @@
 .env
 
 # pytorch wavelets module
-/pytorch_wavelets_testing/pytorch_wavelets/
+/wavelet_neural_network/pytorch_wavelets_testing/pytorch_wavelets/
 
 # IGNORE DOWNLOADED ECG DATA
 
