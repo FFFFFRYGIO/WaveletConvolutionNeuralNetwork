@@ -266,8 +266,12 @@ def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = 
         train_data, train_labels, val_data, val_labels
     )
 
+    train_tensors = train_dataset.tensors
+    val_tensors = val_dataset.tensors
+
     torch.save(train_tensors, training_data_set_file_path)
     torch.save(val_tensors, validation_data_set_file_path)
+
     logger.info('Tensor files saved as {f1} and {f1}.'.format(
         f1=training_data_set_file_path, f2=validation_data_set_file_path)
     )
