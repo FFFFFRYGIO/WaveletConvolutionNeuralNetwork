@@ -8,7 +8,7 @@ import os
 import wfdb
 from numpy.typing import NDArray
 
-from data_getter.utils import get_signal_subset, get_qrs_peaks, normalize_signal
+from data_analysis.data_getter.utils import get_signal_subset, get_qrs_peaks, normalize_signal
 
 DATA_SOURCE = os.path.join(
     'data_getter', 'from_mit_bih_arrhythmia_database', 'mit-bih-arrhythmia-database-1.0.0')

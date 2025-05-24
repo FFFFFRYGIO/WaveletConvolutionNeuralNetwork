@@ -7,7 +7,7 @@ import os
 import wfdb
 from numpy.typing import NDArray
 
-from data_getter.utils import get_signal_subset, get_qrs_peaks, normalize_signal
+from data_analysis.data_getter.utils import get_signal_subset, get_qrs_peaks, normalize_signal
 
 DATA_SOURCE = os.path.join(
     'data_getter', 'from_af_termination_challenge', 'af-termination-challenge-database-1.0.0', 'learning-set')

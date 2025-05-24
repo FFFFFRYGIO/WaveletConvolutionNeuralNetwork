@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
-from plotters.signals_plotter import SignalsPlotter
+from data_analysis.plotters.signals_plotter import SignalsPlotter
 
 
 class InverseDWTPlotter(SignalsPlotter):

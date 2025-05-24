@@ -1,10 +1,9 @@
 """SignalsPlotter class to gather and display signal analysis with wavelets and wavelet transform."""
 import matplotlib.pyplot as plt
 import numpy as np
-import pywt
 from numpy.typing import NDArray
 
-from plotters.signals_plotter import SignalsPlotter
+from data_analysis.plotters.signals_plotter import SignalsPlotter
 
 
 class DWTDecompositionPlotter(SignalsPlotter):

@@ -1,13 +1,12 @@
 """Main script to run expected analysis."""
-import numpy as np
 
-from data_getter.get_signals_data import get_signals_data
-from plotters.dwt_decomposition_plotter import DWTDecompositionPlotter
-from plotters.inverse_dwt_plotter import InverseDWTPlotter
-from plotters.signal_statistical_analysis_plotter import SignalStatisticalAnalysisPlotter
-from plotters.signals_plotter import SignalsPlotter
+from data_analysis.data_getter.get_signals_data import get_signals_data
+from data_analysis.plotters.dwt_decomposition_plotter import DWTDecompositionPlotter
+from data_analysis.plotters.inverse_dwt_plotter import InverseDWTPlotter
+from data_analysis.plotters.signal_statistical_analysis_plotter import SignalStatisticalAnalysisPlotter
+from data_analysis.plotters.signals_plotter import SignalsPlotter
 from signal_statistical_analysis import data_distribution, detect_distribution_type
-from wavelet_transform_module.wavelet_transform import discrete_wavelet_transform, inverse_discrete_wavelet_transform
+from data_analysis.wavelet_transform_module.wavelet_transform import discrete_wavelet_transform, inverse_discrete_wavelet_transform
 
 
 def dwt_plotting(wavelet: str, signal_time: int, decomposition_levels: int | None = 2):
@@ -116,7 +115,7 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
+    main()
 
     import pywt
     from copy import deepcopy

@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from numpy._typing import NDArray
 from scipy.stats import lognorm
 
-from plotters.signals_plotter import SignalsPlotter
+from data_analysis.plotters.signals_plotter import SignalsPlotter
 
 
 class SignalStatisticalAnalysisPlotter(SignalsPlotter):

@@ -6,7 +6,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 
-from official_scripts.dwt_analysis.ecg_signal import ECGSignalContent
+from data_analysis.official_scripts.dwt_analysis.ecg_signal import ECGSignalContent
 
 matplotlib.use("TkAgg")
 

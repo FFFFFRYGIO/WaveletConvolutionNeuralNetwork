@@ -1,9 +1,7 @@
 """Function to get a set of signals for analysis"""
 from numpy._typing import NDArray
 
-from data_getter.from_af_termination_challenge.get_data import get_from_af_termination_challenge
-from data_getter.from_github.get_data import get_from_github
-from data_getter.from_mit_bih_arrhythmia_database.get_data import get_from_mit_bih_arrhythmia_database
+from data_analysis.data_getter.from_github.get_data import get_from_github
 
 
 def get_signals_data(
