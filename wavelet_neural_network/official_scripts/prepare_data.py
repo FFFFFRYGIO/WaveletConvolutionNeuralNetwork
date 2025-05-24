@@ -220,13 +220,13 @@ def create_train_and_validation_tensors_datasets(
     empty_t3 = torch.empty(val_data_tensor.shape[0], 1, val_data_tensor.shape[2])
     empty_t4 = torch.empty(val_data_tensor.shape[0], 1, val_data_tensor.shape[2])
 
-    train_ds = TensorDataset(torch.cat([train_data_tensor, empty_t1, empty_t2], dim=1), train_labels_onehot)
-    validation_ds = TensorDataset(torch.cat([val_data_tensor, empty_t3, empty_t4], dim=1), val_labels_onehot)
+    train_dataset = TensorDataset(torch.cat([train_data_tensor, empty_t1, empty_t2], dim=1), train_labels_onehot)
+    validation_dataset = TensorDataset(torch.cat([val_data_tensor, empty_t3, empty_t4], dim=1), val_labels_onehot)
 
-    logger.info('Train dataset size: {train_ds}.'.format(train_ds=train_ds))
-    logger.info('Validation dataset size: {validation_ds}.'.format(validation_ds=validation_ds))
+    logger.info('Train dataset size: {train_ds}.'.format(train_ds=train_dataset))
+    logger.info('Validation dataset size: {validation_ds}.'.format(validation_ds=validation_dataset))
 
-    return train_ds, validation_ds
+    return train_dataset, validation_dataset
 
 
 def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = None) -> tuple[str, str]:
@@ -262,7 +262,7 @@ def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = 
 
     train_data, train_labels, val_data, val_labels = create_train_and_validation_subsets(signals_normalized)
 
-    train_tensors, val_tensors = create_train_and_validation_tensors_datasets(
+    train_dataset, val_dataset = create_train_and_validation_tensors_datasets(
         train_data, train_labels, val_data, val_labels
     )
 
