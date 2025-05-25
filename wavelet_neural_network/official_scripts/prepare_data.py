@@ -150,6 +150,7 @@ def create_train_and_validation_subsets(
 
     train_signals: list[np.array] = []
     train_labels: list[str] = []
+
     validation_signals: list[np.array] = []
     validation_labels: list[str] = []
 
@@ -162,6 +163,7 @@ def create_train_and_validation_subsets(
 
         train_signals.extend(train_samples)
         train_labels.extend([signal_type] * len(train_samples))
+
         validation_signals.extend(validation_samples)
         validation_labels.extend([signal_type] * len(validation_samples))
 
