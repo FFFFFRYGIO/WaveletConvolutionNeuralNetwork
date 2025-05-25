@@ -1,9 +1,7 @@
 """Script with function to prepare data tensors for Wavelet Neural Network."""
 import os
 import random
-import sys
 import urllib.request
-import logging
 import zipfile
 
 import numpy as np
@@ -13,13 +11,7 @@ from scipy.signal import medfilt
 from torch import nn
 from torch.utils.data import TensorDataset, DataLoader
 
-logging.basicConfig(
-    level=logging.INFO,
-    stream=sys.stdout,
-    format='[%(asctime)s] %(levelname)s %(name)s %(funcName)s: %(message)s',
-    datefmt='%y-%m-%d %H:%M:%S'
-)
-logger = logging.getLogger(__name__)
+from logger import logger
 
 
 def download_dataset() -> tuple[str, str]:
@@ -196,7 +188,7 @@ def create_train_and_validation_subsets(
 
 def create_train_and_validation_tensors_datasets(
         train_signals: list[np.array], train_labels: list[str], val_signals: list[np.array], val_labels: list[str]
-) -> tuple[TensorDataset, TensorDataset]:
+) -> tuple[TensorDataset, TensorDataset, int]:
     """Create train and validation tensors from PyTorch library."""
 
     unique_classes = sorted(set(train_labels + val_labels))
@@ -230,10 +222,10 @@ def create_train_and_validation_tensors_datasets(
     logger.info('Train dataset size: {train_ds}.'.format(train_ds=train_dataset))
     logger.info('Validation dataset size: {validation_ds}.'.format(validation_ds=validation_dataset))
 
-    return train_dataset, validation_dataset
+    return train_dataset, validation_dataset, num_classes
 
 
-def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = None) -> tuple[str, str]:
+def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = None) -> tuple[str, str, int, int]:
     """Import signals data, prepare dataset as tensor and save it to file."""
 
     training_data_set_file_path = os.getenv('TRAINING_DATA_SET_FILE_PATH')
@@ -243,7 +235,9 @@ def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = 
         logger.info('Tensor files exists.')
         if not replace_tensors_files:
             logger.info('Skipping replacing tensors files.')
-            return training_data_set_file_path, validation_data_set_file_path
+            num_classes = 3
+            signal_length = 128  # TODO, make it accessible, read from ready tensor files
+            return training_data_set_file_path, validation_data_set_file_path, num_classes, signal_length
         logger.info('Replacing existing tensor files with new ones.')
 
     logger.info('Generating tensor files.')
@@ -266,7 +260,7 @@ def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = 
 
     train_data, train_labels, val_data, val_labels = create_train_and_validation_subsets(signals_normalized)
 
-    train_dataset, val_dataset = create_train_and_validation_tensors_datasets(
+    train_dataset, val_dataset, num_classes = create_train_and_validation_tensors_datasets(
         train_data, train_labels, val_data, val_labels
     )
 
@@ -280,14 +274,14 @@ def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = 
         f1=training_data_set_file_path, f2=validation_data_set_file_path)
     )
 
-    return training_data_set_file_path, validation_data_set_file_path
+    return training_data_set_file_path, validation_data_set_file_path, num_classes, signal_length
 
 
 if __name__ == '__main__':
-    training_data_file, validation_data_file = prepare_data(signal_time=1)
+    ex_training_data_file, ex_validation_data_file, ex_num_classes, ex_signal_length = prepare_data(signal_time=1)
 
-    loaded_train_data, loaded_train_labels = torch.load(training_data_file)
-    loaded_val_data, loaded_val_labels = torch.load(validation_data_file)
+    loaded_train_data, loaded_train_labels = torch.load(ex_training_data_file)
+    loaded_val_data, loaded_val_labels = torch.load(ex_validation_data_file)
 
     train_ds = TensorDataset(loaded_train_data, loaded_train_labels)
     val_ds = TensorDataset(loaded_val_data, loaded_val_labels)
