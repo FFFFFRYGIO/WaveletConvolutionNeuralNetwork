@@ -17,7 +17,7 @@ class WaveletDWTLayer(nn.Module):
         initial_scaling_filter = deepcopy(self.wavelet.rec_lo)
         self.weights = nn.Parameter(torch.tensor(initial_scaling_filter, dtype=torch.float32), requires_grad=True)
         self.layer_number = layer_number
-        self.filler_value = filler_value  # Out from <-2,2> range, to tell that this is only a filler
+        self.filler_value = filler_value  # Out from <-10,10> range, to tell that this is only a filler
 
     def run_dwt(self, signal: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         """Run DWT on input signal."""

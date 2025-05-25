@@ -9,7 +9,7 @@ class WaveletParsingLayer(nn.Module):
 
     def __init__(self, filler_value: float = 10.1) -> None:
         super().__init__()
-        self.filler_value = filler_value
+        self.filler_value = filler_value  # Out from <-10,10> range, to tell that this is only a filler
 
     def forward(
             self, x1: torch.Tensor, x2: torch.Tensor, x3: torch.Tensor
