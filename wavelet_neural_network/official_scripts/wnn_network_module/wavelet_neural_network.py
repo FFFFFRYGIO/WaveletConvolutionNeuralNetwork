@@ -14,11 +14,15 @@ class WaveletNeuralNet(nn.Module):
             wavelet_name: str = 'db4', num_dense_layers: int = 3) -> None:
         super().__init__()
         self.num_classes = num_classes
-        self.filter_len = pywt.Wavelet(wavelet_name).dec_len
-        max_level = pywt.dwt_max_level(signal_length, self.filter_len)
+        self.signal_length = signal_length
+        self.wavelet_name = wavelet_name
+        filter_len = pywt.Wavelet(wavelet_name).dec_len
+        self.convolution_layers_num = pywt.dwt_max_level(signal_length, filter_len)
+        self.dense_layers_num = num_dense_layers
+
         self.conv_layers = nn.ModuleList([
             WaveletDWTLayer(wavelet_name, layer_number=i + 1)
-            for i in range(max_level)
+            for i in range(self.convolution_layers_num)
         ])
 
         self.parsing_layer = WaveletParsingLayer()
@@ -42,6 +46,7 @@ class WaveletNeuralNet(nn.Module):
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Initialize WNN layers."""
         o1, o2, o3 = x1, x2, x3
+
         for layer in self.conv_layers:
             o1, o2, o3 = layer(o1, o2, o3)
 
