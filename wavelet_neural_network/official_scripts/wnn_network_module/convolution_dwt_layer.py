@@ -28,17 +28,17 @@ class WaveletDWTLayer(nn.Module):
             self, cA: np.ndarray, cD: np.ndarray, cDs: list[np.ndarray], number_coeffs_for_rec: int = 2
     ) -> np.ndarray:
         """Run inverse DWT based on a coefficient list."""
-        included_cDs = [np.zeros_like(cA)]
+        waverec_coeffs = [np.zeros_like(cA)]
 
         for coeff_number, coeff_with_pad in enumerate(cDs[::-1]):
             coeff_bad_shape = coeff_with_pad[np.round(coeff_with_pad, 4) != self.filler_value]
             coeff = np.expand_dims(np.asarray(coeff_bad_shape), axis=0)
             if coeff_number in range(number_coeffs_for_rec):
-                included_cDs.append(coeff)
+                waverec_coeffs.append(coeff)
             else:
-                included_cDs.append(np.zeros_like(coeff))
+                waverec_coeffs.append(np.zeros_like(coeff))
 
-        R = pywt.waverec(included_cDs, self.wavelet)
+        R = pywt.waverec(waverec_coeffs, self.wavelet)
         return R
 
     def run_wavelet_computation(
