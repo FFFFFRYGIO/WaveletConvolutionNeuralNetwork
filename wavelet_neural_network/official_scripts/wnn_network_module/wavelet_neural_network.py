@@ -11,7 +11,7 @@ from wnn_network_module.parsing_layer import WaveletParsingLayer
 class WaveletNeuralNet(nn.Module):
     def __init__(
             self, num_classes: int, signal_length: int,
-            wavelet_name: str = 'db4', num_dense_layers: int | None = None) -> None:
+            wavelet_name: str = 'db4', num_dense_layers: int = 3) -> None:
         super().__init__()
         self.num_classes = num_classes
         self.filter_len = pywt.Wavelet(wavelet_name).dec_len
@@ -26,8 +26,6 @@ class WaveletNeuralNet(nn.Module):
         inputs = [signal_length * (max_level - 1)]
         outputs = []
 
-        if num_dense_layers is None:
-            num_dense_layers = 3
         for _ in range(num_dense_layers - 1):
             new_output = round(sqrt(inputs[-1]))
             outputs.append(new_output)

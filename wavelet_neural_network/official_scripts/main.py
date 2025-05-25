@@ -35,7 +35,7 @@ def get_data_loaders() -> tuple[DataLoader, DataLoader, int, int]:
 
 
 def get_wnn_model(
-        num_classes: int, signal_length: int, wavelet_name: str = 'db4', num_dense_layers: int | None = None
+        num_classes: int, signal_length: int, wavelet_name: str = 'db4', num_dense_layers: int = 3
 ) -> WaveletNeuralNet:
     """Create WNN model based on WaveletNeuralNet class."""
     wnn_model = WaveletNeuralNet(
