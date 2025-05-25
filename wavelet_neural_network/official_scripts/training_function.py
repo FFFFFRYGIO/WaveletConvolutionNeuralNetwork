@@ -36,9 +36,9 @@ def train_and_validate(
 
     train_losses = []
     val_losses = []
-    val_accs = []
+    val_accuracies = []
     val_precisions = []
-    val_confmats = []
+    val_conf_mats = []
     first_layers_params_monitor = []
     last_layer_params_monitor = []
 
@@ -63,8 +63,8 @@ def train_and_validate(
             x1, x2, x3 = data[:, 0:1, :], data[:, 1:2, :], data[:, 2:3, :]
 
             optimizer.zero_grad()
-            logits = model(x1, x2, x3)
-            train_loss = criterion(logits, target.argmax(dim=1))
+            train_outputs = model(x1, x2, x3)
+            train_loss = criterion(train_outputs, target.argmax(dim=1))
             train_loss.backward()
             optimizer.step()
 
@@ -76,54 +76,54 @@ def train_and_validate(
         # — VALIDATE —
         model.eval()
         running_val_loss = 0.0
-        all_preds = []
+        all_predictions = []
         all_trues = []
         with torch.no_grad():
             for data, target in val_loader:
                 # data, target = data.to(device), target.to(device)
                 x1, x2, x3 = data[:, 0:1, :], data[:, 1:2, :], data[:, 2:3, :]
 
-                logits = model(x1, x2, x3)
-                val_loss = criterion(logits, target.argmax(dim=1))
+                val_outputs = model(x1, x2, x3)
+                val_loss = criterion(val_outputs, target.argmax(dim=1))
 
-                preds = logits.argmax(dim=1)
+                predictions = val_outputs.argmax(dim=1)
 
                 running_val_loss += val_loss.item()
 
-                all_preds.append(preds.cpu())
+                all_predictions.append(predictions.cpu())
                 all_trues.append(target.argmax(dim=1).cpu())
 
         # concatenate across batches
-        y_pred = torch.cat(all_preds).numpy()
+        y_pred = torch.cat(all_predictions).numpy()
         y_true = torch.cat(all_trues).numpy()
 
         # accuracy, precision, confusion matrix
         epoch_acc = (y_pred == y_true).mean()
-        epoch_prec = precision_score(y_true, y_pred, average='macro', zero_division=0)
+        epoch_precision = precision_score(y_true, y_pred, average='macro', zero_division=0)
         conf_mat = confusion_matrix(y_true, y_pred)
 
         epoch_val_loss = running_val_loss / len(val_loader)
         val_losses.append(epoch_val_loss)
 
-        val_accs.append(epoch_acc)
-        val_precisions.append(epoch_prec)
-        val_confmats.append(conf_mat)
+        val_accuracies.append(epoch_acc)
+        val_precisions.append(epoch_precision)
+        val_conf_mats.append(conf_mat)
 
         logger.info(f"Epoch {epoch + 1:03d}/{epochs:03d} — "
-              f"Train loss: {epoch_train_loss:.4f}, "
-              f"Val loss: {epoch_val_loss:.4f}, "
-              f"Val Acc: {epoch_acc:.4f}, "
-              f"Val Prec: {epoch_prec:.4f}, "
-              f"Confusion Matrix: {conf_mat.tolist()}, "
-              f"1st layer weights: {current_first_layer_params[0:4]}, "
-              f"last layer weights: {current_last_layer_params[0][0:4]}, ")
+                    f"Train loss: {epoch_train_loss:.4f}, "
+                    f"Val loss: {epoch_val_loss:.4f}, "
+                    f"Val Acc: {epoch_acc:.4f}, "
+                    f"Val Precision: {epoch_precision:.4f}, "
+                    f"Confusion Matrix: {conf_mat.tolist()}, "
+                    f"1st layer weights: {current_first_layer_params[0:4]}, "
+                    f"last layer weights: {current_last_layer_params[0][0:4]}, ")
 
     return {
         'train_losses': train_losses,
         'val_losses': val_losses,
-        'val_accs': val_accs,
+        'val_accuracies': val_accuracies,
         'val_precisions': val_precisions,
-        'val_confmats': val_confmats,
+        'val_conf_mats': val_conf_mats,
         'first_layers_params_monitor': first_layers_params_monitor,
         'last_layer_params_monitor': last_layer_params_monitor,
     }

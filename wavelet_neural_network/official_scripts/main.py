@@ -64,7 +64,7 @@ def plot_results(results: dict) -> None:
     axes[0, 1].set_xlabel("Epoch")
     axes[0, 1].set_ylabel("Loss")
 
-    axes[1, 0].plot(results['val_accs'])
+    axes[1, 0].plot(results['val_accuracies'])
     axes[1, 0].set_title("Validation Accuracy")
     axes[1, 0].set_xlabel("Epoch")
     axes[1, 0].set_ylabel("Accuracy")
