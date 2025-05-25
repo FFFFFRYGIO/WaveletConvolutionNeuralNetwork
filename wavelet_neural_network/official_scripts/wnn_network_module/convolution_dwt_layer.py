@@ -68,12 +68,9 @@ class WaveletDWTLayer(nn.Module):
         return cA, cDs, reconstructions
 
     def forward(
-            self, x1: torch.Tensor, x2: torch.Tensor, x3: torch.Tensor,
+            self, signal_tensor: torch.Tensor, coeffs_tensor: torch.Tensor, reconstructions_tensor: torch.Tensor,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Process each batch element by running DWT and IDWT."""
-        signal_tensor = x1
-        coeffs_tensor = x2
-        reconstructions_tensor = x3
 
         # Process each element in the batch individually
         cA_batch, cD_batch, R_batch = [], [], []

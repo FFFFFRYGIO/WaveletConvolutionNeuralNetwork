@@ -12,10 +12,9 @@ class WaveletParsingLayer(nn.Module):
         self.filler_value = filler_value  # Out from <-10,10> range, to tell that this is only a filler
 
     def forward(
-            self, x1: torch.Tensor, x2: torch.Tensor, x3: torch.Tensor
+            self, x1: torch.Tensor, x2: torch.Tensor, reconstructions_tensor: torch.Tensor
     ) -> torch.Tensor:
         """Convert the flattened reconstructions to a PyTorch tensor"""
-        reconstructions_tensor = x3
         R_batch = []
         for i in range(reconstructions_tensor.shape[0]):
             fully_reconstructed = []
