@@ -165,17 +165,17 @@ def create_train_and_validation_subsets(
         validation_signals.extend(validation_samples)
         validation_labels.extend([signal_type] * len(validation_samples))
 
-    train_pairs = list(zip(train_signals, train_labels))
-    random.shuffle(train_pairs)
-    train_shuffled_signals, train_shuffled_labels = zip(*train_pairs)
-    train_shuffled_signals = list(train_shuffled_signals)
-    train_shuffled_labels = list(train_shuffled_labels)
+    def shuffle_by_index(signals, labels):
+        """Shuffle signals set and signals labels accordingly."""
+        idx = np.random.permutation(len(signals))
+        return [signals[i] for i in idx], [labels[i] for i in idx]
 
-    validation_pairs = list(zip(validation_signals, validation_labels))
-    random.shuffle(validation_pairs)
-    validation_shuffled_signals, validation_shuffled_labels = zip(*validation_pairs)
-    validation_shuffled_signals = list(validation_shuffled_signals)
-    validation_shuffled_labels = list(validation_shuffled_labels)
+    train_shuffled_signals, train_shuffled_labels = shuffle_by_index(
+        train_signals, train_labels
+    )
+    validation_shuffled_signals, validation_shuffled_labels = shuffle_by_index(
+        validation_signals, validation_labels
+    )
 
     assert len(train_shuffled_signals) == len(train_labels)
     assert len(validation_shuffled_signals) == len(validation_labels)
