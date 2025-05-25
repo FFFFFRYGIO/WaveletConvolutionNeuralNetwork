@@ -9,6 +9,21 @@ from wnn_network_module.parsing_layer import WaveletParsingLayer
 
 
 class WaveletNeuralNet(nn.Module):
+    """Wavelet Neural Network PyTorch class."""
+
+    def calculate_dense_layers(self) -> zip:
+        """Calculate input and output amount for all dense layers."""
+        inputs = [self.signal_length * (self.convolution_layers_num - 1)]
+        outputs = []
+
+        for _ in range(self.dense_layers_num - 1):
+            new_output = round(sqrt(inputs[-1]))
+            outputs.append(new_output)
+            inputs.append(new_output)
+        outputs.append(self.num_classes)
+
+        return zip(inputs, outputs)
+
     def __init__(
             self, num_classes: int, signal_length: int,
             wavelet_name: str = 'db4', num_dense_layers: int = 3) -> None:
@@ -27,18 +42,9 @@ class WaveletNeuralNet(nn.Module):
 
         self.parsing_layer = WaveletParsingLayer()
 
-        inputs = [signal_length * (max_level - 1)]
-        outputs = []
-
-        for _ in range(num_dense_layers - 1):
-            new_output = round(sqrt(inputs[-1]))
-            outputs.append(new_output)
-            inputs.append(new_output)
-        outputs.append(num_classes)
-
         self.dense_layers = nn.ModuleList([
             nn.Linear(inp, out)
-            for inp, out in zip(inputs, outputs)
+            for inp, out in self.calculate_dense_layers()
         ])
 
     def forward(
