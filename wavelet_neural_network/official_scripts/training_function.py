@@ -1,3 +1,5 @@
+"""Training and model validation implementation"""
+import numpy as np
 import torch
 from sklearn.metrics import precision_score, confusion_matrix
 from torch import nn
@@ -98,7 +100,7 @@ def train_and_validate(
         y_true = torch.cat(all_trues).numpy()
 
         # accuracy, precision, confusion matrix
-        epoch_acc = (y_pred == y_true).mean()
+        epoch_acc = np.mean(y_pred == y_true)
         epoch_precision = precision_score(y_true, y_pred, average='macro', zero_division=0)
         conf_mat = confusion_matrix(y_true, y_pred)
 
