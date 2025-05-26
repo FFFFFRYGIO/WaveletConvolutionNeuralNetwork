@@ -27,8 +27,6 @@ def train_and_validate(
     logger.info('Learning rate: {lr}'.format(lr=learning_rate))
     logger.info('Device: {device}'.format(device=device))
 
-    # criterion = nn.CrossEntropyLoss()
-
     try:
         optimizer_class = getattr(torch.optim, optimizer_name)
     except AttributeError:
