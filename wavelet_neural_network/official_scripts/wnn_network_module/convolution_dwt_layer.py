@@ -81,10 +81,7 @@ class WaveletDWTLayer(nn.Module):
             cDs_listed = coeffs_tensor[i, :].tolist()
             reconstructions_listed = reconstructions_tensor[i, :].tolist()
 
-            if self.layer_number == 1:
-                signal = np.expand_dims(np.asarray(signal_listed[0]), axis=0)
-            else:
-                signal = np.asarray(signal_listed)
+            signal = np.asarray(signal_listed)
             cDs = [np.asarray(cD) for cD in cDs_listed]
             reconstructions = [np.asarray(rec) for rec in reconstructions_listed]
 
