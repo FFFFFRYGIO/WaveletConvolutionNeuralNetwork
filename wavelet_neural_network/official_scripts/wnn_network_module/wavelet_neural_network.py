@@ -7,6 +7,8 @@ from torch import nn
 from wnn_network_module.convolution_dwt_layer import WaveletDWTLayer
 from wnn_network_module.parsing_layer import WaveletParsingLayer
 
+from logger import logger
+
 
 class WaveletNeuralNet(nn.Module):
     """Wavelet Neural Network PyTorch class."""
@@ -51,6 +53,7 @@ class WaveletNeuralNet(nn.Module):
             self, x1: torch.Tensor, x2: torch.Tensor, x3: torch.Tensor
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Initialize WNN layers."""
+        logger.debug('{module_name} forward'.format(module_name=self.__class__.__name__))
         o1, o2, o3 = x1, x2, x3
 
         for layer in self.conv_layers:

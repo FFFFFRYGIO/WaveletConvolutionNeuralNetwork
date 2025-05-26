@@ -3,6 +3,8 @@ import numpy as np
 import torch
 from torch import nn
 
+from logger import logger
+
 
 class WaveletParsingLayer(nn.Module):
     """Layer that parses convolution results to dense layer."""
@@ -15,6 +17,7 @@ class WaveletParsingLayer(nn.Module):
             self, x1: torch.Tensor, x2: torch.Tensor, x3: torch.Tensor
     ) -> torch.Tensor:
         """Convert the flattened reconstructions to a PyTorch tensor"""
+        logger.debug('{module_name} forward'.format(module_name=self.__class__.__name__))
         reconstructions_tensor = x3
 
         R_batch = []
