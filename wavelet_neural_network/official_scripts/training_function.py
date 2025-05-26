@@ -42,7 +42,7 @@ def train_and_validate(
     first_layers_params_monitor = []
     last_layer_params_monitor = []
 
-    # model.to(device)
+    model.to(device)
 
     for epoch in range(epochs):
         current_first_layer_params = model.conv_layers[0].weights.tolist()
@@ -58,8 +58,7 @@ def train_and_validate(
         model.train()
         running_train_loss = 0.0
         for data, target in train_loader:
-            # data, target = data.to(device), target.to(device)
-            # split channels if needed
+            data, target = data.to(device), target.to(device)
             x1, x2, x3 = data[:, 0:1, :], data[:, 1:2, :], data[:, 2:3, :]
 
             optimizer.zero_grad()
@@ -80,7 +79,7 @@ def train_and_validate(
         all_trues = []
         with torch.no_grad():
             for data, target in val_loader:
-                # data, target = data.to(device), target.to(device)
+                data, target = data.to(device), target.to(device)
                 x1, x2, x3 = data[:, 0:1, :], data[:, 1:2, :], data[:, 2:3, :]
 
                 val_outputs = model(x1, x2, x3)
