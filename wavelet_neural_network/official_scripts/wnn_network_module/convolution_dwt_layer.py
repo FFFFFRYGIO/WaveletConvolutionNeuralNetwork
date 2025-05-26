@@ -53,8 +53,7 @@ class WaveletDWTLayer(nn.Module):
         if self.layer_number == 1:
             cDs = np.array([cD])
         else:
-            cD_pad_amount = cDs[0].size - cD.size
-            cD_padded = np.pad(cD, ((0, 0), (0, cD_pad_amount)), constant_values=self.filler_value)
+            cD_padded = np.pad(cD, ((0, 0), (0, cDs[0].size - cD.size)), constant_values=self.filler_value)
             cDs.append(cD_padded)
 
         # Run IDWT and add new reconstruction
