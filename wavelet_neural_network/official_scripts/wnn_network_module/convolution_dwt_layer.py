@@ -82,13 +82,13 @@ class WaveletDWTLayer(nn.Module):
         cA_batch, cD_batch, R_batch = [], [], []
 
         for i in range(signal_tensor.shape[0]):
-            signal_listed = signal_tensor[i, :].tolist()
-            cDs_listed = coeffs_tensor[i, :].tolist()
-            reconstructions_listed = reconstructions_tensor[i, :].tolist()
+            signal_detached = signal_tensor[i, :].cpu().detach().numpy()
+            cDs_detached = coeffs_tensor[i, :].cpu().detach().numpy()
+            reconstructions_detached = reconstructions_tensor[i, :].cpu().detach().numpy()
 
-            signal = np.asarray(signal_listed)
-            cDs = [np.asarray(cD) for cD in cDs_listed]
-            reconstructions = [np.asarray(rec) for rec in reconstructions_listed]
+            signal = signal_detached
+            cDs = [cD.reshape(1, -1) for cD in cDs_detached]
+            reconstructions = [rec.reshape(1, -1) for rec in reconstructions_detached]
 
             new_cA, new_cDs, new_rec = self.run_wavelet_computation(signal, cDs, reconstructions)
 
