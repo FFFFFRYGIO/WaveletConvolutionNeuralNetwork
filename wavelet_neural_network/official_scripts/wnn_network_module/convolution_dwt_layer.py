@@ -31,8 +31,7 @@ class WaveletDWTLayer(nn.Module):
         waverec_coeffs = [np.zeros_like(cA)]
 
         for coeff_number, coeff_with_pad in enumerate(cDs[::-1]):
-            coeff_bad_shape = coeff_with_pad[np.round(coeff_with_pad, 4) != self.filler_value]
-            coeff = np.expand_dims(np.asarray(coeff_bad_shape), axis=0)
+            coeff = coeff_with_pad[np.abs(coeff_with_pad - self.filler_value) > 1e-4].reshape(1, -1)
             if coeff_number in range(number_coeffs_for_rec):
                 waverec_coeffs.append(coeff)
             else:
