@@ -1,5 +1,4 @@
 """Wavelet parsing layer class for Wavelet Neural Network."""
-import numpy as np
 import torch
 from torch import nn
 
@@ -18,22 +17,16 @@ class WaveletParsingLayer(nn.Module):
     ) -> torch.Tensor:
         """Convert the flattened reconstructions to a PyTorch tensor"""
         logger.debug('{module_name} forward'.format(module_name=self.__class__.__name__))
-        reconstructions_tensor = x3
+        batch_size = x3.size(0)
+        x3_flat_with_padding = x3.view(batch_size, -1)
 
-        R_batch = []
-        for i in range(reconstructions_tensor.shape[0]):
-            fully_reconstructed = []
-            reconstructions_listed = reconstructions_tensor[i, :].tolist()
-            reconstructions = [np.asarray(rec) for rec in reconstructions_listed]
+        non_filler_mask = torch.ne(x3_flat_with_padding, self.filler_value)
+        x3_flat = x3_flat_with_padding.masked_select(non_filler_mask)
 
-            for reconstruction in reconstructions:
-                filtered = reconstruction[reconstruction != self.filler_value]
-                fully_reconstructed.extend(filtered)
+        counts = non_filler_mask.sum(dim=1)
+        if not torch.all(counts == counts[0]):
+            raise RuntimeError(f"Unequal non-filler counts: {counts.tolist()}")
 
-            R_batch.append(fully_reconstructed)
+        out = x3_flat.view(batch_size, int(counts[0].item()))
 
-        R_np = np.stack(R_batch)
-
-        x3_r = torch.tensor(R_np, dtype=x3.dtype, device=x3.device, requires_grad=True)
-
-        return x3_r
+        return out
