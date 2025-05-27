@@ -1,8 +1,8 @@
 """This script is running both DWT using both PyWavelets and torch.nn.Conv1d to compare if their results matches."""
 import pywt
 import torch
-from torch import nn
 import torch.nn.functional as F
+from torch import nn
 
 
 def get_dwt_pywt(signal: torch.Tensor, wavelet_name: str) -> tuple[torch.Tensor, torch.Tensor]:
@@ -50,23 +50,28 @@ def get_dwt_pytorch_conv1d(signal: torch.Tensor, scaling_filter: torch.Tensor) -
     """Run DWT using torch.nn.Conv1d."""
     dec_lo, dec_hi, rec_lo, rec_hi = torch_orthogonal_filter_bank(scaling_filter)
 
-    # 2) cast back to the signal's dtype (usually float32)
+    # 2) back to float32 (or whatever your signal is)
     dec_lo = dec_lo.to(signal.dtype)
     dec_hi = dec_hi.to(signal.dtype)
 
-    # 3) make them conv1d kernels
-    flen = dec_lo.numel()
-    weight_lo = dec_lo.view(1, 1, flen)
-    weight_hi = dec_hi.view(1, 1, flen)
+    # reshape to Conv1d kernels
+    L = dec_lo.numel()
+    w_lo = dec_lo.view(1, 1, L)
+    w_hi = dec_hi.view(1, 1, L)
 
-    # 4) symmetric pad (‘reflect’) by flen-2 on each side
-    #    (this extra “-1” trim gives the exact same length as pywt.dwt)
-    pad_size = flen - 2
-    x = F.pad(signal, (pad_size, pad_size), mode='reflect')
+    # 3) symmetric pad both ends by P = L-1
+    P = L - 1
+    left = signal[..., :P].flip(-1)  # x[0..P-1] reversed
+    right = signal[..., -P:].flip(-1)  # x[-P..-1] reversed
+    x = torch.cat([left, signal, right], dim=-1)
 
-    # 5) conv + stride=2 does the filter + down-sample
-    cA = F.conv1d(x, weight_lo, stride=2)
-    cD = F.conv1d(x, weight_hi, stride=2)
+    # 4) full “valid” conv (no decimation yet)
+    convA = F.conv1d(x, w_lo, stride=1)
+    convD = F.conv1d(x, w_hi, stride=1)
+
+    # 5) down‐sample by picking the odd‐indexed outputs
+    cA = convA[:, :, 1::2]
+    cD = convD[:, :, 1::2]
 
     return cA, cD
 
