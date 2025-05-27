@@ -6,7 +6,7 @@ import pywt
 import torch
 from torch import nn
 
-from ..logger import logger
+from logger import logger
 
 
 class WaveletDWTLayer(nn.Module):
