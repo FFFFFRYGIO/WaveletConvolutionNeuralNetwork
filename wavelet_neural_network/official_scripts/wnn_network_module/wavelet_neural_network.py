@@ -7,7 +7,7 @@ from torch import nn
 from wnn_network_module.convolution_dwt_layer import WaveletDWTLayer
 from wnn_network_module.parsing_layer import WaveletParsingLayer
 
-from logger import logger
+from ..logger import logger
 
 
 class WaveletNeuralNet(nn.Module):

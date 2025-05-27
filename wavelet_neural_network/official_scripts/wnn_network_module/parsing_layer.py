@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from logger import logger
+from ..logger import logger
 
 
 class WaveletParsingLayer(nn.Module):
