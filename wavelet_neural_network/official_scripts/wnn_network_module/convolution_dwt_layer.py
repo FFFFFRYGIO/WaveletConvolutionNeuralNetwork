@@ -116,40 +116,4 @@ class WaveletDWTLayer(nn.Module):
             self, x1: torch.Tensor, x2: torch.Tensor, x3: torch.Tensor,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Process each batch element by running DWT and IDWT."""
-        logger.debug('{module_name} forward {layer_num}'.format(
-            module_name=self.__class__.__name__, layer_num=self.layer_number)
-        )
-        signal_tensor = x1
-        coeffs_tensor = x2
-        reconstructions_tensor = x3
-
-        # Process each element in the batch individually
-        cA_batch, cD_batch, R_batch = [], [], []
-
-        for i in range(signal_tensor.shape[0]):
-            signal_detached = signal_tensor[i, :].cpu().detach().numpy()
-            cDs_detached = coeffs_tensor[i, :].cpu().detach().numpy()
-            reconstructions_detached = reconstructions_tensor[i, :].cpu().detach().numpy()
-
-            signal = signal_detached
-            cDs = [cD.reshape(1, -1) for cD in cDs_detached]
-            reconstructions = [rec.reshape(1, -1) for rec in reconstructions_detached]
-
-            new_cA, new_cDs, new_rec = self.run_wavelet_computation(signal, cDs, reconstructions)
-
-            # Add element to batch segment
-            cA_batch.append(new_cA)
-            cD_batch.append(new_cDs)
-            R_batch.append(new_rec)
-
-        # Stack the results back into batches
-        cA_np = np.stack(cA_batch)
-        cD_np = np.stack(cD_batch)
-        R_np = np.stack(R_batch)
-
-        # Convert NumPy arrays back to PyTorch tensors and require gradients
-        x1_r = torch.tensor(cA_np, dtype=x1.dtype, device=x1.device, requires_grad=True)
-        x2_r = torch.tensor(cD_np, dtype=x2.dtype, device=x2.device, requires_grad=True)
-        x3_r = torch.tensor(R_np, dtype=x3.dtype, device=x3.device, requires_grad=True)
-
-        return x1_r, x2_r, x3_r
+        pass
