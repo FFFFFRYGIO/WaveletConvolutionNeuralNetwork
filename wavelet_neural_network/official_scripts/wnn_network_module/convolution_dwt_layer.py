@@ -21,6 +21,14 @@ class WaveletDWTLayer(nn.Module):
         self.layer_number = layer_number
         self.filler_value = filler_value  # Out from <-10,10> range, to tell that this is only a filler
 
+    def update_wavelet(self) -> None:
+        """Update wavelet with new weights as filter."""
+        new_filter_bank = pywt.orthogonal_filter_bank(self.weights)
+        new_wavelet = pywt.Wavelet(f'cust_{self.wavelet_name}', filter_bank=new_filter_bank)
+        new_wavelet.orthogonal = True
+        new_wavelet.biorthogonal = True
+        self.wavelet = new_wavelet
+
     def run_dwt(self, signal: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         """Run DWT on input signal."""
         cA, cD = pywt.dwt(signal, self.wavelet)
@@ -46,6 +54,9 @@ class WaveletDWTLayer(nn.Module):
             self, signal: np.ndarray, cDs: list[np.ndarray], reconstructions: list[np.ndarray]
     ) -> tuple[np.ndarray, list[np.ndarray], list[np.ndarray]]:
         """Run DWT and IDWT and return result for a batch element."""
+
+        # Update wavelet with new weights as filter
+        self.update_wavelet()
 
         # Run DWT
         cA, cD = self.run_dwt(signal)
