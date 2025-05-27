@@ -22,7 +22,7 @@ def get_idwt_pywt(cA: torch.Tensor, cD: torch.Tensor, wavelet_name: str) -> torc
     cA_np = cA.squeeze().cpu().numpy()
     cD_np = cD.squeeze().cpu().numpy()
     rec_np = pywt.waverec([cA_np, cD_np], wavelet)
-    rec = torch.from_numpy(rec_np).unsqueeze(0).unsqueeze(0).to(signal)
+    rec = torch.from_numpy(rec_np).unsqueeze(0).unsqueeze(0).to(device=cA.device, dtype=cA.dtype)
     return rec
 
 
@@ -48,7 +48,6 @@ if __name__ == '__main__':
     wavelet_main_name = 'db4'
 
     example_signal = torch.randn(1, 1, 128)
-    signal = example_signal
 
     # PyWavelets
     cA_pywt, cD_pywt = get_dwt_pywt(example_signal, wavelet_main_name)
