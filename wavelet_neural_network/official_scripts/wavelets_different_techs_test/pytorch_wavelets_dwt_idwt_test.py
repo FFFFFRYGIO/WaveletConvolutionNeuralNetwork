@@ -68,6 +68,7 @@ def get_dwt_pytorch(signal: torch.Tensor, scaling_filter: torch.Tensor) -> tuple
 
 
 def get_idwt_pytorch(cA: torch.Tensor, cD: torch.Tensor, scaling_filter: torch.Tensor) -> torch.Tensor:
+    """Run IDWT using pytorch_wavelets."""
     dec_lo, dec_hi, rec_lo, rec_hi = torch_orthogonal_filter_bank(scaling_filter)
     idwt1d = IDWT1D(wave=(rec_lo.tolist(), rec_hi.tolist()), mode='symmetric')
     rec = idwt1d((cA, [cD]))
