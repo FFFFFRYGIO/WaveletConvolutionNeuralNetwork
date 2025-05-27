@@ -21,9 +21,43 @@ class WaveletDWTLayer(nn.Module):
         self.layer_number = layer_number
         self.filler_value = filler_value  # Out from <-10,10> range, to tell that this is only a filler
 
+    @staticmethod
+    def torch_qmf(wavelet_filter: torch.Tensor) -> torch.Tensor:
+        """Returns the Quadrature Mirror Filter (QMF) of the input tensor.
+        Refactored from PyWavelets library:
+        https://pywavelets.readthedocs.io/en/latest/ref/other-functions.html#pywt.qmf"""
+        if wavelet_filter.dim() != 1:
+            raise ValueError("`wavelet_filter` must be a 1-D tensor.")
+        qm_filter = torch.flip(wavelet_filter, dims=[0])
+        qm_filter[1::2] = -qm_filter[1::2]
+        return qm_filter
+
+    def torch_orthogonal_filter_bank(
+            self, scaling_filter: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Returns the orthogonal filter bank for the given scaling filter tensor.
+        Refactored from PyWavelets library:
+        https://pywavelets.readthedocs.io/en/latest/ref/other-functions.html#pywt.orthogonal_filter_bank"""
+        if scaling_filter.dim() != 1:
+            raise ValueError("`scaling_filter` must be a 1-D tensor.")
+        length = scaling_filter.size(0)
+        if length % 2 != 0:
+            raise ValueError("`scaling_filter` length has to be even.")
+
+        scaling_filter = scaling_filter.to(torch.float64)
+
+        rec_lo = torch.sqrt(torch.tensor(2.0, dtype=scaling_filter.dtype)) * scaling_filter / scaling_filter.sum()
+        dec_lo = torch.flip(rec_lo, dims=[0])
+
+        rec_hi = self.torch_qmf(rec_lo)
+        dec_hi = torch.flip(rec_hi, dims=[0])
+
+        return dec_lo, dec_hi, rec_lo, rec_hi
+
     def update_wavelet(self) -> None:
         """Update wavelet with new weights as filter."""
-        new_filter_bank = pywt.orthogonal_filter_bank(self.weights)
+        new_filter_bank = self.torch_orthogonal_filter_bank(self.weights)
+        new_filter_bank = [f.tolist() for f in new_filter_bank]
         new_wavelet = pywt.Wavelet(f'cust_{self.wavelet_name}', filter_bank=new_filter_bank)
         new_wavelet.orthogonal = True
         new_wavelet.biorthogonal = True
