@@ -1,7 +1,7 @@
 import pywt
 import torch
 # from pytorch_wavelets import DWT1D, IDWT1D
-from my_DWT1D.my_DWT1D import DWT1DForward as DWT1D, DWT1DInverse as IDWT1D
+from my_DWT1D.transform1d import DWT1DForward as DWT1D, DWT1DInverse as IDWT1D
 from torch import nn
 
 
