@@ -78,7 +78,7 @@ def plot_results(results: dict, save_to_file: bool = True, show_plots: bool = Fa
     plt.tight_layout()
 
     if save_to_file:
-        save_path = f"training_curves_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        save_path = f"results/training_curves_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
         fig.savefig(save_path)
     if show_plots:
         plt.show()
