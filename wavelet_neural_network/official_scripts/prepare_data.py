@@ -237,8 +237,12 @@ def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = 
         logger.info('Tensor files exists.')
         if not replace_tensors_files:
             logger.info('Skipping replacing tensors files.')
-            num_classes = 3
-            signal_length = 128  # TODO, make it accessible, read from ready tensor files
+            X_train, y_train = torch.load(training_data_set_file_path)
+            X_val, y_val = torch.load(validation_data_set_file_path)
+            num_classes = len(y_train[0])
+            signal_length = X_train.size(-1)
+            logger.info(f'{len(X_train)=}, {len(X_val)=}, '
+                        f'{num_classes=} {signal_length=}')
             return training_data_set_file_path, validation_data_set_file_path, num_classes, signal_length
         logger.info('Replacing existing tensor files with new ones.')
 
@@ -276,6 +280,8 @@ def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = 
         f1=training_data_set_file_path, f2=validation_data_set_file_path)
     )
 
+    logger.info(f'{len(train_tensors)=}, {len(val_tensors)=}, '
+                f'{num_classes=} {signal_length=}')
     return training_data_set_file_path, validation_data_set_file_path, num_classes, signal_length
 
 
