@@ -13,13 +13,15 @@ from torch import nn
 class WaveletDWTLayer(nn.Module):
     """Create initial parameters based on given discrete wavelet name."""
 
-    def __init__(self, wavelet_name: str = 'db4', layer_number: int = 0, filler_value: float = 10.1) -> None:
+    def __init__(self, wavelet_name: str = 'db4', layer_number: int = 0,
+                 number_coeffs_for_rec: int = 2, filler_value: float = 10.1) -> None:
         super().__init__()
         self.wavelet_name = wavelet_name
         self.wavelet = pywt.Wavelet(self.wavelet_name)
         initial_scaling_filter = deepcopy(self.wavelet.rec_lo)
         self.weights = nn.Parameter(torch.tensor(initial_scaling_filter, dtype=torch.float32), requires_grad=True)
         self.layer_number = layer_number
+        self.number_coeffs_for_rec = number_coeffs_for_rec
         self.filler_value = filler_value  # Out from <-10,10> range, to tell that this is only a filler
 
     @staticmethod
@@ -88,67 +90,52 @@ class WaveletDWTLayer(nn.Module):
         cA_t = torch.zeros_like(cA)
         cDs_t: list[Tensor] = []
 
-        for cD_number, cD_with_pad in enumerate(cDs.unbind()):
-            non_filler_mask = torch.ne(cD_with_pad, self.filler_value)
-            cD = cD_with_pad.masked_select(non_filler_mask).view(1, 1, -1)
+        for cD_number in reversed(range(cDs.size(1))):
+            cD_with_pad = cDs[:, cD_number:cD_number + 1, :]
+
+            mask = (cD_with_pad != self.filler_value)
+            real_len = int(mask[0, 0].sum().item())
+            cD_real = cD_with_pad[:, :, :real_len]
+
             if cD_number in range(number_coeffs_for_rec):
-                cDs_t.append(cD)
+                cDs_t.append(cD_real)
             else:
-                cDs_t.append(torch.zeros_like(cD))
+                cDs_t.append(torch.zeros_like(cD_real))
 
         rec = idwt1d((cA_t, cDs_t))
         return rec
-
-    def run_wavelet_computation(
-            self, signal: Tensor, cDs: Tensor, reconstructions: Tensor
-    ) -> tuple[Tensor, Tensor, Tensor]:
-        """Run DWT and IDWT and return result for a batch element."""
-
-        # Update wavelet with new weights as filter
-        self.update_wavelet()
-
-        # Run DWT
-        cA, cD = self.run_dwt(signal)
-
-        # Add cD to cDs
-        if self.layer_number == 1:
-            cDs = cD
-        else:
-            pad = cD.new_full((*cD.shape[:-1], cDs.shape[-1] - cD.shape[-1]), self.filler_value)
-            cD_padded = torch.cat([cD, pad], dim=-1)
-            cDs = torch.cat([cDs, cD_padded])
-
-        # Run IDWT and add new reconstruction
-        if not self.layer_number == 1:
-            R = self.run_idwt(cA, cD, cDs)
-            if self.layer_number == 2:
-                reconstructions = R
-            else:
-                reconstructions = torch.cat([reconstructions, R])
-
-        return cA, cDs, reconstructions
 
     def forward(self, x1: Tensor, x2: Tensor, x3: Tensor) -> tuple[Tensor, Tensor, Tensor]:
         """Process each batch element by running DWT and IDWT."""
         logger.debug('{module_name} forward {layer_num}'.format(
             module_name=self.__class__.__name__, layer_num=self.layer_number)
         )
-        signal = x1.unbind()
-        cDs = x2.unbind()
-        reconstructions = x3.unbind()
 
-        out_cA_list = []
-        out_cDs_list = []
-        out_recs_list = []
+        # Update wavelet with new weights as filter
+        self.update_wavelet()
 
-        for signal, cDs, recs in zip(signal, cDs, reconstructions):
-            cA_i, cDs_i, rec_i = self.run_wavelet_computation(signal, cDs, recs)
-            out_cA_list.append(cA_i)
-            out_cDs_list.append(cDs_i)
-            out_recs_list.append(rec_i)
+        # Run DWT
+        cA, cD = self.run_dwt(x1)
 
-        cA_batch = torch.stack(out_cA_list)
-        cDs_batch = torch.stack(out_cDs_list)
-        recs_batch = torch.stack(out_recs_list)
+        # Add new cD to cDs
+        if self.layer_number == 1:
+            cDs = cD
+        else:
+            pad = cD.new_full((cD.size(0), 1, x2.size(-1) - cD.size(-1)), self.filler_value)
+            cD_padded = torch.cat([cD, pad], dim=-1)
+            cDs = torch.cat([x2, cD_padded], dim=1)
 
-        return cA_batch, cDs_batch, recs_batch
+        reconstructions: Tensor
+        if self.layer_number == 1:
+            reconstructions = x3
+        else:
+            # Run IDWT
+            R = self.run_idwt(cA, cD, cDs)
+
+            # Add new reconstruction to reconstructions
+            if self.layer_number == 2:
+                reconstructions = R
+            else:
+                reconstructions = torch.cat([x3, R], dim=1)
+
+        return cA, cDs, reconstructions
