@@ -10,6 +10,9 @@
 # clone of pytorch wavelets module customized for attempt to parse filter as type tensor
 wavelet_neural_network/wnn_pytorch_convolution/my_DWT1D
 
+# Training results for official Wavelet Neural Network
+wavelet_neural_network/official_scripts/results
+
 # IGNORE DOWNLOADED ECG DATA
 
 # Ignore ECGData for PyTorch tensors
