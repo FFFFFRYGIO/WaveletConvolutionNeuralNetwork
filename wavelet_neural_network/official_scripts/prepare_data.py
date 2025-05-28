@@ -230,8 +230,8 @@ def create_train_and_validation_tensors_datasets(
 def prepare_data(replace_tensors_files: bool = False, signal_time: int | None = None) -> tuple[str, str, int, int]:
     """Import signals data, prepare dataset as tensor and save it to file."""
 
-    training_data_set_file_path = os.getenv('TRAINING_DATA_SET_FILE_PATH')
-    validation_data_set_file_path = os.getenv('VALIDATION_DATA_SET_FILE_PATH')
+    training_data_set_file_path = os.getenv('TRAINING_DATA_SET_FILE_PATH').replace('.pt', f'_{signal_time}.pt')
+    validation_data_set_file_path = os.getenv('VALIDATION_DATA_SET_FILE_PATH').replace('.pt', f'_{signal_time}.pt')
 
     if os.path.exists(training_data_set_file_path) and os.path.exists(validation_data_set_file_path):
         logger.info('Tensor files exists.')
