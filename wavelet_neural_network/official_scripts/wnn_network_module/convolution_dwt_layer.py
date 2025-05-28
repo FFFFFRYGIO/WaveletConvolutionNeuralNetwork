@@ -116,4 +116,7 @@ class WaveletDWTLayer(nn.Module):
             self, x1: torch.Tensor, x2: torch.Tensor, x3: torch.Tensor,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Process each batch element by running DWT and IDWT."""
+        logger.debug('{module_name} forward {layer_num}'.format(
+            module_name=self.__class__.__name__, layer_num=self.layer_number)
+        )
         pass
