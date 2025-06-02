@@ -6,3 +6,6 @@
 
 # Training results for official Wavelet Neural Network
 wavelet_neural_network/official_scripts/results
+
+# Data folder for Wavelet Neural Network
+wavelet_neural_network/data
