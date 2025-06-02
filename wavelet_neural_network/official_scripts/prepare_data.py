@@ -18,6 +18,7 @@ def download_dataset() -> tuple[str, str]:
     """Download and extract ECG signals file from the url."""
 
     download_url = os.getenv('DATA_SOURCE_URL')
+    os.makedirs('data', exist_ok=True)
     mat_file = download_url.split('/')[-1].split('.')[0]
     zip_path, mat_path = rf'data/{mat_file}.zip', rf'data/{mat_file}.mat'
 
